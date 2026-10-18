@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Philosophy of AI - Online Examination</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e293b;
+      --secondary: #0f766e;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --warning: #b45309;
+      --warning-bg: #fef3c7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, 'Noto Sans Malayalam', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family);
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .exam-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 24px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .exam-header h1 {
+      font-size: 26px;
+      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .exam-header p {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s;
+    }
+
+    #login-screen .card {
+      max-width: 500px;
+      margin: 40px auto;
+      text-align: center;
+    }
+    .form-group {
+      margin: 20px 0;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-control:focus {
+      border-color: var(--primary-light);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      margin: 20px 0;
+    }
+    .btn-tool {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 6px 14px;
+      font-size: 13px;
+      margin-right: 8px;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-tool:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .btn-tool.active {
+      background: #e0e7ff;
+      border-color: #818cf8;
+      color: #3730a3;
+    }
+
+    .q-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .q-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
+    .mal-text {
+      display: none;
+      color: #0369a1;
+      font-weight: 500;
+      margin-left: 6px;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14.5px;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      user-select: none;
+    }
+    .option-item:hover:not(.locked) {
+      border-color: var(--primary-light);
+      background: #f8fafc;
+    }
+    .option-item input[type="radio"] {
+      margin-top: 3px;
+      margin-right: 12px;
+      accent-color: var(--primary);
+    }
+    .option-item.locked {
+      cursor: default;
+    }
+    .option-item.correct {
+      background-color: var(--success-bg) !important;
+      border-color: var(--success) !important;
+      color: #14532d !important;
+      font-weight: 600;
+    }
+    .option-item.incorrect {
+      background-color: var(--danger-bg) !important;
+      border-color: var(--danger) !important;
+      color: #7f1d1d !important;
+    }
+
+    .status-badge {
+      display: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+    .status-badge.correct {
+      display: inline-block;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+    .status-badge.incorrect {
+      display: inline-block;
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .hint-container {
+      display: none;
+      background: var(--warning-bg);
+      border-left: 4px solid var(--warning);
+      padding: 10px 14px;
+      font-size: 13.5px;
+      border-radius: 0 6px 6px 0;
+      color: #78350f;
+      margin-top: 10px;
+    }
+
+    .scorecard {
+      background: #ffffff;
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .scorecard h2 {
+      font-size: 22px;
+      color: var(--primary);
+      margin-bottom: 16px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      text-align: center;
+    }
+    .scorecard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .scorecard-metric {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .metric-val {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+    .metric-val.high { color: var(--success); }
+    .metric-val.low { color: var(--danger); }
+    .scorecard-note {
+      background: #eff6ff;
+      border-left: 4px solid var(--primary-light);
+      padding: 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14.5px;
+      color: #1e3a8a;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-card {
+      background: white;
+      max-width: 440px;
+      width: 100%;
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    .modal-card h3 {
+      font-size: 19px;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+    .modal-card p {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .modal-actions .btn {
+      flex: 1;
+    }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    @media (max-width: 640px) {
+      .exam-header h1 { font-size: 20px; }
+      .scorecard-grid { grid-template-columns: 1fr 1fr; }
+      .modal-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="exam-header">
+    <h1>Philosophy of AI</h1>
+    <p>Comprehensive Multiple Choice Assessment</p>
+  </header>
+
+  <section id="login-screen">
+    <div class="card">
+      <h2 style="font-size: 20px; margin-bottom: 12px;">MCQ Examination</h2>
+      
+      <div class="form-group">
+        <label for="student-name">Student Full Name</label>
+        <input type="text" id="student-name" class="form-control" placeholder="Enter your full name..." autocomplete="off">
+      </div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="startExam()">Start Examination</button>
+    </div>
+  </section>
+
+  <main id="exam-workspace" style="display: none;">
+    <div id="top-scorecard-container"></div>
+    <div id="questions-list"></div>
+    <div id="submit-section">
+      <button class="btn btn-primary btn-submit" onclick="handlePreSubmit()">Submit Examination</button>
+    </div>
+    <div id="bottom-scorecard-container"></div>
+  </main>
+
+</div>
+
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-card">
+    <h3>Unanswered Questions</h3>
+    <p id="modal-warning-text"></p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeConfirmModal()">Review Questions</button>
+      <button class="btn btn-primary" onclick="executeFinalSubmit()">Proceed & Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUBJECT_NAME = "Philosophy of AI";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6IXYRG6MiU8g6TJQu5H1H7jdtAPjy3_9j5FT5uJSpRIoQwGM9aIVQs7-XFTX05Alclw/exec";
+
+  let studentName = "";
+  let examStartTime = null;
+  let isSubmitted = false;
+
+  const questionBank = [
+    {
+      q: "Who authored the article \"Minds, Brains and Programs\"?",
+      mQ: "\"Minds, Brains and Programs\" എന്ന ലേഖനം എഴുതിയത് ആര്?",
+      opts: ["Claude Shannon", "John Searle", "Alan M. Turing", "Alonzo Church"],
+      mOpts: ["ക്ലോഡ് ഷാനൻ", "ജോൺ സിയേൾ", "അലൻ എം. ടൂറിംഗ്", "അലോൺസോ ചർച്ച്"],
+      ans: 1,
+      hint: "American philosopher famous for the Chinese Room thought experiment.",
+      mHint: "ചൈനീസ് റൂം പരീക്ഷണത്തിലൂടെ പ്രശസ്തനായ തത്ത്വചിന്തകൻ."
+    },
+    {
+      q: "Who was the first to use the human terminology \"memory\" when referring to a computer?",
+      mQ: "കമ്പ്യൂട്ടറുകളുമായി ബന്ധപ്പെടുത്തി \"മെമ്മറി\" എന്ന പദം ആദ്യമായി ഉപയോഗിച്ചത് ആര്?",
+      opts: ["John von Neumann", "Claude Shannon", "Alonzo Church", "Alan M. Turing"],
+      mOpts: ["ജോൺ വോൺ ന്യൂമാൻ", "ക്ലോഡ് ഷാനൻ", "അലോൺസോ ചർച്ച്", "അലൻ എം. ടൂറിംഗ്"],
+      ans: 0,
+      hint: "Architect of the classic computer architecture model.",
+      mHint: "ആധുനിക കമ്പ്യൂട്ടർ വാസ്തുവിദ്യയുടെ ശില്പി."
+    },
+    {
+      q: "Who is considered the founder of information theory?",
+      mQ: "വിവര സിദ്ധാന്തത്തിന്റെ (Information Theory) സ്ഥാപകനായി കണക്കാക്കപ്പെടുന്നത് ആര്?",
+      opts: ["Claude Shannon", "Alan M. Turing", "Alonzo Church", "John von Neumann"],
+      mOpts: ["ക്ലോഡ് ഷാനൻ", "അലൻ എം. ടൂറിംഗ്", "അലോൺസോ ചർച്ച്", "ജോൺ വോൺ ന്യൂമാൻ"],
+      ans: 0,
+      hint: "Father of digital communication and bit definition.",
+      mHint: "ഡിജിറ്റൽ കമ്മ്യൂണിക്കേഷൻ സിദ്ധാന്തത്തിന്റെ ഉപജ്ഞാതാവ്."
+    },
+    {
+      q: "Who is the author of the notable research entitled \"Intelligent Machinery\"?",
+      mQ: "\"Intelligent Machinery\" എന്ന പ്രബന്ധത്തിന്റെ രചയിതാവ് ആര്?",
+      opts: ["Claude Shannon", "Alan M. Turing", "Alonzo Church", "John von Neumann"],
+      mOpts: ["ക്ലോഡ് ഷാനൻ", "അലൻ എം. ടൂറിംഗ്", "അലോൺസോ ചർച്ച്", "ജോൺ വോൺ ന്യൂമാൻ"],
+      ans: 1,
+      hint: "Pioneer of modern computer science and artificial intelligence.",
+      mHint: "കമ്പ്യൂട്ടർ സയൻസിന്റെയും എഐയുടെയും പിതാവായി അറിയപ്പെടുന്ന വ്യക്തി."
+    },
+    {
+      q: "What is the philosophical discipline that examines the nature, origins, boundaries, and legitimacy of knowledge?",
+      mQ: "അറിവിന്റെ സ്വഭാവം, ഉത്ഭവം, പരിധികൾ, സാധുത എന്നിവ പരിശോധിക്കുന്ന തത്ത്വചിന്താ ശാഖ ഏതാണ്?",
+      opts: ["Epistemology", "Truth", "Correspondence", "Justification"],
+      mOpts: ["ജ്ഞാനമീമാംസ (Epistemology)", "സത്യം (Truth)", "കറസ്‌പോണ്ടൻസ്", "ന്യായീകരണം (Justification)"],
+      ans: 0,
+      hint: "The formal theory of knowledge.",
+      mHint: "അറിവിനെക്കുറിച്ചുള്ള ദാർശനിക ശാഖ."
+    },
+    {
+      q: "What constitutes the fundamental basis of knowledge in philosophy and epistemology?",
+      mQ: "തത്ത്വചിന്തയിലും ജ്ഞാനശാസ്ത്രത്തിലും അറിവിന്റെ അടിസ്ഥാന അടിത്തറയായി കണക്കാക്കുന്നത് എന്താണ്?",
+      opts: ["Epistemology", "Truth", "Correspondence", "Justification"],
+      mOpts: ["ജ്ഞാനമീമാംസ", "സത്യം (Truth)", "കറസ്‌പോണ്ടൻസ്", "ന്യായീകരണം"],
+      ans: 1,
+      hint: "Knowledge is traditionally defined as justified true belief.",
+      mHint: "അറിവിന് ഒഴിച്ചുകൂടാനാവാത്ത പ്രാഥമിക ഘടകം."
+    },
+    {
+      q: "Which theory posits that truth is that which accurately represents or corresponds to objective reality?",
+      mQ: "സത്യം എന്നത് വസ്തുനിഷ്ഠമായ യാഥാർത്ഥ്യവുമായി പൊരുത്തപ്പെടുന്നതാണെന്ന് വ്യക്തമാക്കുന്ന സിദ്ധാന്തം ഏതാണ്?",
+      opts: ["Epistemology", "Truth", "Correspondence", "Justification"],
+      mOpts: ["ജ്ഞാനമീമാംസ", "സത്യം", "കറസ്‌പോണ്ടൻസ് തിയറി (Correspondence)", "ന്യായീകരണം"],
+      ans: 2,
+      hint: "The correspondence theory of truth.",
+      mHint: "യാഥാർത്ഥ്യവുമായി പൊരുത്തപ്പെടൽ എന്ന സത്യ സിദ്ധാന്തം."
+    },
+    {
+      q: "What concerns the reason or evidence that supports a belief?",
+      mQ: "ഒരു വിശ്വാസത്തെ സാധൂകരിക്കുന്ന തെളിവുകളെയോ യുക്തിയെയോ സൂചിപ്പിക്കുന്നത് എന്താണ്?",
+      opts: ["Epistemology", "Truth", "Correspondence", "Justification"],
+      mOpts: ["ജ്ഞാനമീമാംസ", "സത്യം", "കറസ്‌പോണ്ടൻസ്", "ന്യായീകരണം (Justification)"],
+      ans: 3,
+      hint: "Providing rational grounds for believing something.",
+      mHint: "ഒരു വിശ്വാസത്തിനുള്ള തക്കതായ തെളിവോ ന്യായീകരണമോ."
+    },
+    {
+      q: "What is the subfield of ethics that focuses on the practical application of ethical concepts?",
+      mQ: "ധാർമ്മിക ആശയങ്ങളുടെ പ്രായോഗിക പ്രയോഗത്തിൽ ശ്രദ്ധ കേന്ദ്രീകരിക്കുന്ന ധാർമ്മിക ശാസ്ത്ര വിഭാഗം ഏത്?",
+      opts: ["Truth", "Correspondence", "Justification", "Applied ethics"],
+      mOpts: ["സത്യം", "കറസ്‌പോണ്ടൻസ്", "ന്യായീകരണം", "അപ്ലൈഡ് എത്തിക്സ് (Applied ethics)"],
+      ans: 3,
+      hint: "Deals with real-world moral issues like medical, business, or AI ethics.",
+      mHint: "പ്രായോഗിക ജീവിതത്തിലെ ധാർമ്മിക പ്രശ്നങ്ങളെ പഠിക്കുന്ന ശാഖ."
+    },
+    {
+      q: "During which decade was the classical model of artificial intelligence (AI) developed?",
+      mQ: "നിർമ്മിത ബുദ്ധിയുടെ (AI) ക്ലാസിക്കൽ മോഡൽ വികസിപ്പിച്ചത് ഏത് ദശകത്തിലാണ്?",
+      opts: ["1950s", "1920s", "1930s", "1910s"],
+      mOpts: ["1950-കൾ", "1920-കൾ", "1930-കൾ", "1910-കൾ"],
+      ans: 0,
+      hint: "The era of the Dartmouth Workshop (1956).",
+      mHint: "ഡാർട്ട്മൗത്ത് കോൺഫറൻസ് നടന്ന ദശകം."
+    },
+    {
+      q: "Symbolic AI or rule-based AI was also known as what?",
+      mQ: "സിംബോളിക് എഐ അല്ലെങ്കിൽ റൂൾ-ബേസ്ഡ് എഐ ഏത് പേരിലാണ് അറിയപ്പെട്ടിരുന്നത്?",
+      opts: ["Postmodern AI", "Modern universal AI", "GOFAI (Good Old-Fashioned AI) / Classical Model", "Cybernetics"],
+      mOpts: ["പോസ്റ്റ് മോഡേൺ എഐ", "മോഡേൺ യൂണിവേഴ്സൽ എഐ", "GOFAI (Good Old-Fashioned AI) / ക്ലാസിക്കൽ മോഡൽ", "സൈബർനെറ്റിക്സ്"],
+      ans: 2,
+      hint: "Term coined by philosopher John Haugeland.",
+      mHint: "പഴയ തലമുറയിലെ നിയമങ്ങളെ അടിസ്ഥാനമാക്കിയുള്ള എഐ."
+    },
+    {
+      q: "What does PSSH stand for?",
+      mQ: "PSSH എന്നതിന്റെ പൂർണ്ണരൂപം എന്താണ്?",
+      opts: ["Physical Symbol System Hypothesis", "Physical System Symbol Hypothesis", "Philosophical System Symbol Hypothesis", "Physiological System Symbol Hypothesis"],
+      mOpts: ["ഫിസിക്കൽ സിംബൽ സിസ്റ്റം ഹൈപ്പോതെസിസ് (PSSH)", "ഫിസിക്കൽ സിസ്റ്റം സിംബൽ ഹൈപ്പോതെസിസ്", "ഫിലോസഫിക്കൽ സിസ്റ്റം സിംബൽ ഹൈപ്പോതെസിസ്", "ഫിസിയോളജിക്കൽ സിസ്റ്റം സിംബൽ ഹൈപ്പോതെസിസ്"],
+      ans: 0,
+      hint: "Hypothesis proposed by Newell and Simon.",
+      mHint: "ന്യൂവലും സൈമണും അവതരിപ്പിച്ച ഹൈപ്പോതെസിസ്."
+    },
+    {
+      q: "Which language became important for Symbolic AI research?",
+      mQ: "സിംബോളിക് എഐ ഗവേഷണങ്ങളിൽ ഏറ്റവും പ്രധാനമായി ഉപയോഗിച്ച പ്രോഗ്രാമിംഗ് ഭാഷ ഏതാണ്?",
+      opts: ["BASIC", "FORTRAN", "LISP", "HTML"],
+      mOpts: ["ബേസിക്", "ഫോർട്രാൻ", "ലിസ്പ് (LISP)", "എച്ച്ടിഎംഎൽ"],
+      ans: 2,
+      hint: "List Processing language developed by John McCarthy.",
+      mHint: "ജോൺ മക്കാർത്തി വികസിപ്പിച്ച ലിസ്റ്റ് പ്രോസസ്സിംഗ് ഭാഷ."
+    },
+    {
+      q: "In Symbolic AI, problem-solving is often described as:",
+      mQ: "സിംബോളിക് എഐയിൽ പ്രശ്നപരിഹാരം (problem-solving) പ്രധാനമായും വിവരിക്കപ്പെടുന്നത് എങ്ങനെയാണ്?",
+      opts: ["Dreaming", "Searching a state space", "Sleeping", "Forgetting"],
+      mOpts: ["സ്വപ്നം കാണൽ", "സ്റ്റേറ്റ് സ്പേസ് തിരയൽ (Searching a state space)", "ഉറങ്ങൽ", "മറന്നുപോവൽ"],
+      ans: 1,
+      hint: "Navigating through possible configurations to find a goal.",
+      mHint: "വിവിധ അവസ്ഥകളിലൂടെ തിരഞ്ഞ് ലക്ഷ്യത്തിലെത്തൽ."
+    },
+    {
+      q: "Which early AI program is a classic example of cognitive simulation?",
+      mQ: "കോഗ്നിറ്റീവ് സിമുലേഷന്റെ ക്ലാസിക് ഉദാഹരണമായ ആദ്യകാല എഐ പ്രോഗ്രാം ഏതാണ്?",
+      opts: ["MYCIN", "General Problem Solver (GPS)", "AlphaGo", "ELIZA"],
+      mOpts: ["MYCIN", "ജനറൽ പ്രോബ്ലം സോൾവർ (GPS)", "AlphaGo", "ELIZA"],
+      ans: 1,
+      hint: "Program designed by Newell and Simon to imitate human thinking.",
+      mHint: "മനുഷ്യന്റെ പ്രശ്നപരിഹാര ചിന്തകളെ അനുകരിക്കാൻ നിർമ്മിച്ച സിസ്റ്റം."
+    },
+    {
+      q: "In cognitive simulation, intelligence is achieved by:",
+      mQ: "കോഗ്നിറ്റീവ് സിമുലേഷനിൽ ബുദ്ധി (intelligence) കൈവരിക്കുന്നത് എങ്ങനെയാണ്?",
+      opts: ["Faster processors", "Modeling internal mental representations", "Avoiding symbolic reasoning", "Random trial and error"],
+      mOpts: ["വേഗതയേറിയ പ്രോസസറുകൾ വഴി", "ആന്തരിക മാനസിക പ്രതിനിധാനങ്ങൾ മാതൃകയാക്കിക്കൊണ്ട്", "സിംബോളിക് യുക്തി ഒഴിവാക്കിക്കൊണ്ട്", "റാൻഡം പരീക്ഷണങ്ങളിലൂടെ"],
+      ans: 1,
+      hint: "Replicating human mental processes internally.",
+      mHint: "മനസ്സിന്റെ ആന്തരിക ചിന്താരീതികളെ അനുകരിക്കുക."
+    },
+    {
+      q: "Expert systems are examples of:",
+      mQ: "എക്സ്പെർട്ട് സിസ്റ്റങ്ങൾ ഏതിന് ഉദാഹരണമാണ്?",
+      opts: ["Symbolic AI", "Robotics", "Neural AI", "Genetic AI"],
+      mOpts: ["സിംബോളിക് എഐ (Symbolic AI)", "റോബോട്ടിക്സ്", "ന്യൂറൽ എഐ", "ജനറ്റിക് എഐ"],
+      ans: 0,
+      hint: "Rule-based deduction with IF-THEN rules.",
+      mHint: "വ്യവസ്ഥകളും നിയമങ്ങളും അടിസ്ഥാനമാക്കിയുള്ള എഐ."
+    },
+    {
+      q: "Who were major contributors to the cognitive simulation approach?",
+      mQ: "കോഗ്നിറ്റീവ് സിമുലേഷൻ സമീപനത്തിൽ പ്രധാന സംഭാവനകൾ നൽകിയവർ ആരാണ്?",
+      opts: ["Descartes and Kant", "Newell and Simon", "McCarthy and Minsky", "Turing and Church"],
+      mOpts: ["ഡെക്കാർട്ട്, കാന്റ്", "ന്യൂവൽ, സൈമൺ (Newell & Simon)", "മക്കാർത്തി, മിൻസ്കി", "ടൂറിംഗ്, ചർച്ച്"],
+      ans: 1,
+      hint: "Creators of the Logic Theorist and General Problem Solver.",
+      mHint: "ലോജിക് തിയറിസ്റ്റും ജിപിഎസും സൃഷ്ടിച്ച ചിന്തകർ."
+    },
+    {
+      q: "John McCarthy is associated with the development of:",
+      mQ: "ജോൺ മക്കാർത്തി ഏതിന്റെ വികസനവുമായാണ് ബന്ധപ്പെട്ടിരിക്കുന്നത്?",
+      opts: ["Psychoanalysis", "Symbolic AI", "Behaviorism", "Quantum theory"],
+      mOpts: ["മനോവിശകലനം", "സിംബോളിക് എഐ (Symbolic AI)", "ബിഹേവിയറിസം", "ക്വാണ്ടം സിദ്ധാന്തം"],
+      ans: 1,
+      hint: "He coined the term 'Artificial Intelligence'.",
+      mHint: "എഐ എന്ന പദം ആദ്യമായി നിർദ്ദേശിച്ച വ്യക്തി."
+    },
+    {
+      q: "The Turing Test was proposed by:",
+      mQ: "ടൂറിംഗ് ടെസ്റ്റ് നിർദ്ദേശിച്ചത് ആര്?",
+      opts: ["John McCarthy", "Alan Turing", "Marvin Minsky", "Norbert Wiener"],
+      mOpts: ["ജോൺ മക്കാർത്തി", "അലൻ ടൂറിംഗ് (Alan Turing)", "മാർവിൻ മിൻസ്കി", "നോർബർട്ട് വീനർ"],
+      ans: 1,
+      hint: "British mathematician and codebreaker of Enigma.",
+      mHint: "എനിഗ്മ കോഡ് തകർത്ത പ്രമുഖ ബ്രിട്ടീഷ് ഗണിതശാസ്ത്രജ്ഞൻ."
+    },
+    {
+      q: "The Turing Test was introduced in Turing's 1950 paper titled:",
+      mQ: "1950-ൽ ഏത് പ്രബന്ധത്തിലൂടെയാണ് അലൻ ടൂറിംഗ് ടൂറിംഗ് ടെസ്റ്റ് അവതരിപ്പിച്ചത്?",
+      opts: ["Computing Machinery and Intelligence", "Mind and Machines", "Intelligent Systems", "Artificial Minds"],
+      mOpts: ["കമ്പ്യൂട്ടിംഗ് മെഷിനറി ആൻഡ് ഇന്റലിജൻസ്", "മൈൻഡ് ആൻഡ് മെഷീൻസ്", "ഇന്റലിജന്റ് സിസ്റ്റംസ്", "ആർട്ടിഫിഷ്യൽ മൈൻഡ്സ്"],
+      ans: 0,
+      hint: "Famous opening question: 'Can machines think?'",
+      mHint: "\"മെഷീനുകൾക്ക് ചിന്തിക്കാൻ കഴിയുമോ?\" എന്ന് ചോദിച്ച പ്രബന്ധം."
+    },
+    {
+      q: "In the Turing Test, a machine is considered intelligent if it:",
+      mQ: "ടൂറിംഗ് ടെസ്റ്റിൽ ഒരു യന്ത്രം ബുദ്ധിയുള്ളതാണെന്ന് കണക്കാക്കുന്നത് എപ്പോഴാണ്?",
+      opts: ["Solves mathematical problems", "Thinks like a human brain", "Can imitate human responses convincingly", "Has consciousness"],
+      mOpts: ["ഗണിത പ്രശ്നങ്ങൾ പരിഹരിക്കുമ്പോൾ", "മനുഷ്യ മസ്തിഷ്കം പോലെ ചിന്തിക്കുമ്പോൾ", "മനുഷ്യന്റെ പ്രതികരണങ്ങളെ വിശ്വസനീയമായി അനുകരിക്കുമ്പോൾ", "ബോധമുണ്ടാകുമ്പോൾ"],
+      ans: 2,
+      hint: "Passing as human in text conversation through the Imitation Game.",
+      mHint: "സംഭാഷണത്തിൽ മനുഷ്യനെപ്പോലെ അനുകരിക്കാൻ സാധിക്കുമ്പോൾ."
+    },
+    {
+      q: "The primary focus of the Turing Test is on:",
+      mQ: "ടൂറിംഗ് ടെസ്റ്റിന്റെ പ്രധാന ശ്രദ്ധ എന്തിലാണ്?",
+      opts: ["Internal structure", "External behavior", "Emotions", "Biological similarity"],
+      mOpts: ["ആന്തരിക ഘടന", "ബാഹ്യ പെരുമാറ്റം (External behavior)", "വികാരങ്ങൾ", "ജൈവശാസ്ത്രപരമായ സമാനത"],
+      ans: 1,
+      hint: "Evaluating observable output rather than internal workings.",
+      mHint: "ബാഹ്യമായി കാണാൻ സാധിക്കുന്ന പ്രതികരണങ്ങൾ വിലയിരുത്തൽ."
+    },
+    {
+      q: "According to Turing, if a machine passes the test, we should say it:",
+      mQ: "ടൂറിംഗിന്റെ അഭിപ്രായത്തിൽ ഒരു മെഷീൻ ടെസ്റ്റ് വിജയിച്ചാൽ നമുക്ക് പറയാൻ കഴിയുന്നത്:",
+      opts: ["Is human", "Is conscious", "Can think", "Is alive"],
+      mOpts: ["അത് മനുഷ്യനാണ്", "അതിന് ബോധമുണ്ട്", "അതിന് ചിന്തിക്കാൻ കഴിയും (Can think)", "അതിന് ജീവനുണ്ട്"],
+      ans: 2,
+      hint: "The behavioral equivalent of thinking.",
+      mHint: "മെഷീന് ചിന്തിക്കാനുള്ള ശേഷിയുണ്ടെന്ന് കണക്കാക്കാം."
+    },
+    {
+      q: "A major criticism of the Turing Test is that it:",
+      mQ: "ടൂറിംഗ് ടെസ്റ്റിനെതിരെയുള്ള പ്രധാന വിമർശനം എന്താണ്?",
+      opts: ["Ignores behavior", "Measures understanding", "Confuses imitation with real intelligence", "Requires embodiment"],
+      mOpts: ["പെരുമാറ്റത്തെ അവഗണിക്കുന്നു", "മനസ്സിലാക്കലിനെ അളക്കുന്നു", "യഥാർത്ഥ ബുദ്ധിക്ക് പകരം അനുകരണത്തെ അളക്കുന്നു", "ശരീരം ആവശ്യപ്പെടുന്നു"],
+      ans: 2,
+      hint: "Simulating behavior is not equivalent to real understanding.",
+      mHint: "കേവലമായ അനുകരണത്തെ യഥാർത്ഥ അറിവായി തെറ്റിദ്ധരിക്കുന്നു."
+    },
+    {
+      q: "The Chinese Room argument was proposed by:",
+      mQ: "ചൈനീസ് റൂം വാദം (Chinese Room Argument) അവതരിപ്പിച്ചത് ആര്?",
+      opts: ["Alan Turing", "John Searle", "Hilary Putnam", "Marvin Minsky"],
+      mOpts: ["അലൻ ടൂറിംഗ്", "ജോൺ സിയേൾ (John Searle)", "ഹിലരി പുട്ട്നം", "മാർവിൻ മിൻസ്കി"],
+      ans: 1,
+      hint: "UC Berkeley philosopher arguing against Strong AI.",
+      mHint: "സ്ട്രോങ്ങ് എഐക്കെതിരെ ശക്തമായി വാദിച്ച തത്ത്വചിന്തകൻ."
+    },
+    {
+      q: "The Chinese Room thought experiment was designed to challenge:",
+      mQ: "ചൈനീസ് റൂം ചിന്താ പരീക്ഷണം ഏതിനെ വെല്ലുവിളിക്കാനാണ് തയ്യാറാക്കിയത്?",
+      opts: ["Weak AI", "Functionalism", "Strong AI", "Behaviorism"],
+      mOpts: ["വീക്ക് എഐ", "ഫങ്ഷണലിസം", "സ്ട്രോങ്ങ് എഐ (Strong AI)", "ബിഹേവിയറിസം"],
+      ans: 2,
+      hint: "The claim that computers have actual minds and understanding.",
+      mHint: "കമ്പ്യൂട്ടറുകൾക്ക് യഥാർത്ഥ മനസ്സുണ്ടെന്ന വാദത്തെ തള്ളിക്കളയാൻ."
+    },
+    {
+      q: "In the Chinese Room, the person inside the room is manipulating:",
+      mQ: "ചൈനീസ് റൂമിൽ മുറിക്കുള്ളിലുള്ള വ്യക്തി കൈകാര്യം ചെയ്യുന്നത് എന്തിനെയാണ്?",
+      opts: ["Electrical circuits", "Meanings", "Symbols according to rules", "Neural signals"],
+      mOpts: ["വൈദ്യുത സർക്യൂട്ടുകൾ", "അർത്ഥങ്ങൾ", "നിയമങ്ങൾക്കനുസൃതമായി ചിഹ്നങ്ങളെ (Symbols)", "നാഡീ സിഗ്നലുകൾ"],
+      ans: 2,
+      hint: "Syntactic rule-following without semantic understanding.",
+      mHint: "അർത്ഥമറിയാതെ നിയമങ്ങൾ പ്രകാരം ചിഹ്നങ്ങൾ കൈകാര്യം ചെയ്യൽ."
+    },
+    {
+      q: "Which test is indirectly criticized by the Chinese Room argument?",
+      mQ: "ചൈനീസ് റൂം വാദത്തിലൂടെ പരോക്ഷമായി വിമർശിക്കപ്പെടുന്ന പരിശോധന ഏത്?",
+      opts: ["IQ Test", "Turing Test", "CAPTCHA", "SAT"],
+      mOpts: ["ഐക്യൂ ടെസ്റ്റ്", "ടൂറിംഗ് ടെസ്റ്റ് (Turing Test)", "ക്യാപ്ച", "എസ്എറ്റി"],
+      ans: 1,
+      hint: "The behavioral conversation test proposed in 1950.",
+      mHint: "സംഭാഷണത്തിലൂടെ ബുദ്ധി അളക്കുന്ന ടൂറിംഗ് ടെസ്റ്റ്."
+    },
+    {
+      q: "Searle's argument distinguishes between:",
+      mQ: "സിയേളിന്റെ വാദം തമ്മിൽ വേർതിരിക്കുന്നത് ഏതെല്ലാമാണ്?",
+      opts: ["Syntax and semantics", "Hardware and software", "Mind and body", "Input and output"],
+      mOpts: ["സിന്റാക്സും സിമാന്റിക്സും (Syntax and semantics)", "ഹാർഡ്‌വെയറും സോഫ്റ്റ്‌വെയറും", "മനസ്സും ശരീരവും", "ഇൻപുട്ടും ഔട്ട്പുട്ടും"],
+      ans: 0,
+      hint: "Grammar/rules vs. actual meaning and comprehension.",
+      mHint: "രൂപഘടനയും (syntax) യഥാർത്ഥ അർത്ഥവും (semantics)."
+    },
+    {
+      q: "Who is generally referred to as the Father of Modern Philosophy?",
+      mQ: "ആധുനിക തത്ത്വചിന്തയുടെ പിതാവ് എന്ന് പൊതുവെ അറിയപ്പെടുന്നത് ആര്?",
+      opts: ["René Descartes", "Alan Turing", "John Searle", "Plato"],
+      mOpts: ["റെനെ ഡെക്കാർട്ട് (René Descartes)", "അലൻ ടൂറിംഗ്", "ജോൺ സിയേൾ", "പ്ലേറ്റോ"],
+      ans: 0,
+      hint: "French thinker famous for 'Cogito, ergo sum'.",
+      mHint: "\"ഞാൻ ചിന്തിക്കുന്നു, അതിനാൽ ഞാൻ നിലനിൽക്കുന്നു\" എന്ന് പറഞ്ഞ ഫ്രഞ്ച് ചിന്തകൻ."
+    },
+    {
+      q: "Descartes begins his philosophy with a method of:",
+      mQ: "ഡെക്കാർട്ട് തന്റെ തത്ത്വചിന്ത ആരംഭിക്കുന്നത് ഏത് രീതിയിലൂടെയാണ്?",
+      opts: ["Faith", "Observation", "Systematic / Radical doubt", "Experiment"],
+      mOpts: ["വിശ്വാസം", "നിരീക്ഷണം", "ചിട്ടയായ / റാഡിക്കൽ സംശയം (Systematic doubt)", "പരീക്ഷണം"],
+      ans: 2,
+      hint: "Doubting everything until finding indubitable certainty.",
+      mHint: "സംശയാതീതമായ സത്യം കണ്ടെത്താൻ എല്ലാത്തിനെയും സംശയിക്കുന്ന രീതി."
+    },
+    {
+      q: "Descartes' famous statement *Cogito, ergo sum* means:",
+      mQ: "ഡെക്കാർട്ടിന്റെ പ്രശസ്തമായ *Cogito, ergo sum* എന്ന വാക്യത്തിന്റെ അർത്ഥം:",
+      opts: ["I doubt, therefore God exists", "I think, therefore I am", "I feel, therefore I exist", "I exist, therefore I think"],
+      mOpts: ["ഞാൻ സംശയിക്കുന്നു, അതിനാൽ ദൈവമുണ്ട്", "ഞാൻ ചിന്തിക്കുന്നു, അതിനാൽ ഞാൻ നിലനിൽക്കുന്നു", "ഞാൻ അനുഭവിക്കുന്നു, അതിനാൽ നിലനിൽക്കുന്നു", "ഞാൻ ഉണ്ട്, അതിനാൽ ഞാൻ ചിന്തിക്കുന്നു"],
+      ans: 1,
+      hint: "\"I think, therefore I am.\"",
+      mHint: "ചിന്തയാണ് നിലനിൽപ്പിന്റെ ഉറപ്പ് നൽകുന്നത്."
+    },
+    {
+      q: "According to Descartes, the essence of the mind is:",
+      mQ: "ഡെക്കാർട്ടിന്റെ വീക്ഷണത്തിൽ മനസ്സിന്റെ സത്ത (essence) എന്താണ്?",
+      opts: ["Extension", "Thought", "Motion", "Sensation"],
+      mOpts: ["വിസ്തൃതി (Extension)", "ചിന്ത (Thought)", "ചലനം", "സംവേദനം"],
+      ans: 1,
+      hint: "Res cogitans = thinking thing.",
+      mHint: "മനസ്സ് എന്നത് ചിന്തിക്കുന്ന ഒന്നാണ് (Res cogitans)."
+    },
+    {
+      q: "According to Descartes, the idea of God is the idea of:",
+      mQ: "ഡെക്കാർട്ടിന്റെ അഭിപ്രായത്തിൽ ദൈവത്തെക്കുറിച്ചുള്ള സങ്കല്പം എന്നാൽ:",
+      opts: ["A powerful angel", "An infinite and perfect being", "Nature", "Human reason"],
+      mOpts: ["ശക്തിയുള്ള മാലാഖ", "അനന്തവും പൂർണ്ണവുമായ സത്ത (Infinite & perfect being)", "പ്രകൃതി", "മനുഷ്യ യുക്തി"],
+      ans: 1,
+      hint: "A supremely perfect, infinite being.",
+      mHint: "സർവ്വ പൂർണ്ണതയുമുള്ള അനന്ത സത്ത."
+    },
+    {
+      q: "Descartes uses the conceivability argument to show that:",
+      mQ: "കൺസീവബിലിറ്റി ആർഗ്യുമെന്റ് (Conceivability argument) വഴി ഡെക്കാർട്ട് തെളിയിക്കാൻ ശ്രമിക്കുന്നത്:",
+      opts: ["Mind and body are identical", "Mind and body are distinct", "Only the body exists", "Knowledge is impossible"],
+      mOpts: ["മനസ്സും ശരീരവും ഒന്നാണ്", "മനസ്സും ശരീരവും പരസ്പരം വ്യത്യസ്തമാണ് (Distinct)", "ശരീരം മാത്രമേ നിലനിൽക്കുന്നുള്ളൂ", "അറിവ് അസാധ്യമാണ്"],
+      ans: 1,
+      hint: "Mind can exist without body; they are separable.",
+      mHint: "മനസ്സും ശരീരവും രണ്ടാണെന്ന് സ്ഥാപിക്കാൻ."
+    },
+    {
+      q: "Descartes believes he can clearly conceive of himself as:",
+      mQ: "ഡെക്കാർട്ടിന് തന്നെക്കുറിച്ച് വ്യക്തമായി സങ്കൽപ്പിക്കാൻ കഴിയുന്നത് എന്തായിട്ടാണ്?",
+      opts: ["A machine", "A body without a mind", "A thinking thing without a body", "Pure matter"],
+      mOpts: ["ഒരു മെഷീൻ", "മനസ്സില്ലാത്ത ശരീരം", "ശരീരമില്ലാത്ത ഒരു ചിന്തിക്കുന്ന വസ്തുവായി (Thinking thing)", "ശുദ്ധമായ പദാർത്ഥം"],
+      ans: 2,
+      hint: "An immaterial thinking entity.",
+      mHint: "ശരീരമില്ലാതെ തന്നെ ചിന്തിക്കാൻ സാധിക്കുന്ന വസ്തു."
+    },
+    {
+      q: "The conceivability argument claims that if two things can be clearly conceived apart, then they:",
+      mQ: "രണ്ട് കാര്യങ്ങളെ വ്യക്തമായി വെവ്വേറെ സങ്കൽപ്പിക്കാൻ സാധിക്കുമെങ്കിൽ അവ:",
+      opts: ["Must be illusions", "Are logically contradictory", "Can exist separately", "Are material"],
+      mOpts: ["ഭ്രമങ്ങളായിരിക്കണം", "യുക്തിവിരുദ്ധമാണ്", "വെവ്വേറെ നിലനിൽക്കാൻ കഴിയും (Can exist separately)", "ഭൗതിക വസ്തുക്കളാണ്"],
+      ans: 2,
+      hint: "Clear distinct conception implies distinct ontological existence.",
+      mHint: "പരസ്പരം ആശ്രയിക്കാതെ നിലനിൽക്കാൻ സാധിക്കും."
+    },
+    {
+      q: "The divisibility argument concludes that because bodies are divisible and minds are not, they are:",
+      mQ: "ശരീരം വിഭജിക്കാൻ സാധിക്കുന്നതും മനസ്സ് വിഭജിക്കാൻ സാധിക്കാത്തതുമായതിനാൽ അവ:",
+      opts: ["The same substance", "Completely unrelated", "Distinct substances", "Imaginary"],
+      mOpts: ["ഒരേ വസ്തുവാണ്", "ബന്ധമില്ലാത്തവയാണ്", "വ്യത്യസ്ത സത്തകളാണ് (Distinct substances)", "സാങ്കൽപ്പികമാണ്"],
+      ans: 2,
+      hint: "Matter has physical parts; mind is indivisible unity.",
+      mHint: "രണ്ടും തികച്ചും വ്യത്യസ്ത സ്വഭാവമുള്ള സത്തകളാണ്."
+    },
+    {
+      q: "In the divisibility argument, Descartes claims that cutting the body:",
+      mQ: "വിഭജന വാദത്തിൽ (Divisibility argument) ശരീരം ഛേദിക്കപ്പെട്ടാൽ:",
+      opts: ["Destroys the mind", "Divides consciousness into pieces", "Does not divide the mind", "Proves materialism"],
+      mOpts: ["മനസ്സ് നശിക്കുന്നു", "ബോധം കഷണങ്ങളാകുന്നു", "മനസ്സിനെ വിഭജിക്കുന്നില്ല (Does not divide mind)", "ഭൗതികവാദം തെളിയിക്കുന്നു"],
+      ans: 2,
+      hint: "The mind remains whole even if a limb is amputated.",
+      mHint: "ശരീരത്തിന് പോറൽ ഏറ്റാലും മനസ്സ് പൂർണ്ണമായി തന്നെ നിൽക്കുന്നു."
+    },
+    {
+      q: "Descartes' view that mind and body are two different substances is called:",
+      mQ: "മനസ്സും ശരീരവും രണ്ട് വ്യത്യസ്ത സത്തകളാണെന്ന ഡെക്കാർട്ടിന്റെ കാഴ്ചപ്പാട് അറിയപ്പെടുന്നത്:",
+      opts: ["Monism", "Dualism", "Functionalism", "Eliminativism"],
+      mOpts: ["മോണിസം", "ദ്വൈതവാദം (Dualism)", "ഫങ്ഷണലിസം", "എലിമിനേറ്റിവിസം"],
+      ans: 1,
+      hint: "Substance dualism / Cartesian dualism.",
+      mHint: "മനസ്സും ശരീരവും രണ്ടെന്ന കാർട്ടീഷ്യൻ ഡ്യുവലിസം."
+    },
+    {
+      q: "In Descartes' philosophy, mental states are known with:",
+      mQ: "ഡെക്കാർട്ടിന്റെ തത്ത്വചിന്തയിൽ മാനസികാവസ്ഥകൾ അറിയപ്പെടുന്നത് എങ്ങനെയാണ്?",
+      opts: ["Probability", "Confusion", "Absolute certainty", "Scientific testing"],
+      mOpts: ["സാധ്യതയോടെ", "ആശയക്കുഴപ്പത്തോടെ", "പൂർണ്ണമായ നിശ്ചയദാർഢ്യത്തോടെ (Absolute certainty)", "ശാസ്ത്രീയ പരീക്ഷണങ്ങളിലൂടെ"],
+      ans: 2,
+      hint: "Immediate and indubitable awareness.",
+      mHint: "സംശയമില്ലാത്ത പൂർണ്ണ ബോധ്യത്തോടെ."
+    },
+    {
+      q: "In Indian philosophy, the sources of valid knowledge are called:",
+      mQ: "ഭാരതീയ തത്ത്വചിന്തയിൽ ശരിയായ അറിവിന്റെ ഉറവിടങ്ങളെ വിളിക്കുന്നത്:",
+      opts: ["Dharma", "Pramāṇa", "Karma", "Mokṣa"],
+      mOpts: ["ധർമ്മം", "പ്രമാണം (Pramāṇa)", "കർമ്മം", "മോക്ഷം"],
+      ans: 1,
+      hint: "Epistemic means of obtaining true knowledge (pramā).",
+      mHint: "ശരിയായ ജ്ഞാനം നേടാനുള്ള ഉപാധികൾ."
+    },
+    {
+      q: "Which of the following is accepted as a Pramāṇa by almost all Indian philosophical schools?",
+      mQ: "എല്ലാ ഭാരതീയ ദാർശനിക ശാഖകളും ഏതാണ്ട് അംഗീകരിക്കുന്ന പ്രമാണം ഏതാണ്?",
+      opts: ["Arthāpatti", "Anupalabdhi", "Pratyakṣa (Perception)", "Śabda"],
+      mOpts: ["അർത്ഥാപത്തി", "അനുപലബ്ധി", "പ്രത്യക്ഷം (Pratyakṣa / Perception)", "ശബ്ദം"],
+      ans: 2,
+      hint: "Direct sensory perception.",
+      mHint: "ഇന്ദ്രിയങ്ങളിലൂടെയുള്ള നേരിട്ടുള്ള അനുഭവം."
+    },
+    {
+      q: "Which Pramāṇa refers to knowledge gained through inference?",
+      mQ: "അനുമാനത്തിലൂടെ ലഭിക്കുന്ന അറിവിനെ സൂചിപ്പിക്കുന്ന പ്രമാണം ഏതാണ്?",
+      opts: ["Pratyakṣa", "Anumāna", "Upamāna", "Śabda"],
+      mOpts: ["പ്രത്യക്ഷം", "അനുമാനം (Anumāna)", "ഉപമാനം", "ശബ്ദം"],
+      ans: 1,
+      hint: "Inferential deduction from a sign (linga).",
+      mHint: "യുക്തിയിലൂടെയുള്ള അനുമാന ജ്ഞാനം."
+    },
+    {
+      q: "Buddhism accepts how many Pramāṇas?",
+      mQ: "ബുദ്ധമതം എത്ര പ്രമാണങ്ങളെയാണ് അംഗീകരിക്കുന്നത്?",
+      opts: ["One", "Two", "Three", "Four"],
+      mOpts: ["ഒന്ന്", "രണ്ട് (Two)", "മൂന്ന്", "നാല്"],
+      ans: 1,
+      hint: "Perception and Inference.",
+      mHint: "പ്രത്യക്ഷവും അനുമാനവും മാത്രം."
+    },
+    {
+      q: "Which two Pramāṇas are accepted by Buddhism?",
+      mQ: "ബുദ്ധമതം അംഗീകരിക്കുന്ന രണ്ട് പ്രമാണങ്ങൾ ഏതെല്ലാമാണ്?",
+      opts: ["Perception and Testimony", "Inference and Comparison", "Perception and Inference", "Testimony and Presumption"],
+      mOpts: ["പ്രത്യക്ഷവും ശബ്ദവും", "അനുമാനവും ഉപമാനവും", "പ്രത്യക്ഷവും അനുമാനവും (Perception & Inference)", "ശബ്ദവും അർത്ഥാപത്തിയും"],
+      ans: 2,
+      hint: "Pratyaksha and Anumana.",
+      mHint: "നേരിട്ടുള്ള അനുഭവവും യുക്തിപരമായ അനുമാനവും."
+    },
+    {
+      q: "Nyāya philosophy is primarily concerned with:",
+      mQ: "ന്യായ തത്ത്വചിന്ത പ്രധാനമായും എന്തിനെക്കുറിച്ചാണ് ചർച്ച ചെയ്യുന്നത്?",
+      opts: ["Liberation through devotion", "Logical reasoning and valid knowledge", "Ritual practices", "Meditation techniques"],
+      mOpts: ["ഭക്തിയിലൂടെയുള്ള മുക്തി", "യുക്തിചിന്തയും ശരിയായ അറിവും (Logical reasoning & valid knowledge)", "ആചാരാനുഷ്ഠാനങ്ങൾ", "ധ്യാന രീതികൾ"],
+      ans: 1,
+      hint: "Logic, epistemology, and rigorous argumentation.",
+      mHint: "യുക്തിശാസ്ത്രവും പ്രമാണ പരിശോധനകളും."
+    },
+    {
+      q: "In Nyāya, valid knowledge is called:",
+      mQ: "ന്യായ ദർശനത്തിൽ ശരിയായ അറിവിനെ വിളിക്കുന്നത് എന്താണ്?",
+      opts: ["Avidyā", "Pramā", "Saṃsāra", "Mokṣa"],
+      mOpts: ["അവിദ്യ", "പ്രമ (Pramā)", "സംസാരം", "മോക്ഷം"],
+      ans: 1,
+      hint: "Pramā is authentic, true cognition.",
+      mHint: "പ്രമാണങ്ങളിലൂടെ ലഭിക്കുന്ന സത്യമായ അറിവ്."
+    },
+    {
+      q: "How many Pramāṇas are accepted by the Nyāya school?",
+      mQ: "ന്യായ ദർശനം എത്ര പ്രമാണങ്ങളെ അംഗീകരിക്കുന്നു?",
+      opts: ["Two", "Three", "Four", "Six"],
+      mOpts: ["രണ്ട്", "മൂന്ന്", "നാല് (Four)", "ആറ്"],
+      ans: 2,
+      hint: "Pratyaksha, Anumana, Upamana, and Shabda.",
+      mHint: "പ്രത്യക്ഷം, അനുമാനം, ഉപമാനം, ശബ്ദം."
+    },
+    {
+      q: "Which of the following is NOT a Nyāya Pramāṇa?",
+      mQ: "താഴെ പറയുന്നവയിൽ ന്യായ ദർശനത്തിലെ പ്രമാണം അല്ലാത്തത് ഏത്?",
+      opts: ["Perception (Pratyakṣa)", "Inference (Anumāna)", "Comparison (Upamāna)", "Presumption (Arthāpatti)"],
+      mOpts: ["പ്രത്യക്ഷം", "അനുമാനം", "ഉപമാനം", "അർത്ഥാപത്തി (Arthāpatti)"],
+      ans: 3,
+      hint: "Arthapatti is accepted by Mimamsa and Advaita, not Nyaya.",
+      mHint: "മീമാംസകർ സ്വീകരിച്ച അർത്ഥാപത്തി ന്യായദർശനം അംഗീകരിക്കുന്നില്ല."
+    },
+    {
+      q: "Anumāna (inference) is based on:",
+      mQ: "അനുമാനം (Inference) എന്തിനെ അടിസ്ഥാനമാക്കിയുള്ളതാണ്?",
+      opts: ["Direct experience", "Testimony", "Universal relation (Vyāpti)", "Guesswork"],
+      mOpts: ["നേരിട്ടുള്ള അനുഭവം", "ശബ്ദ സാക്ഷ്യം", "വ്യാപ്തി / സാർവത്രിക ബന്ധം (Vyāpti)", "ഊഹം"],
+      ans: 2,
+      hint: "Invariable concomitance between the sign (hetu) and what is inferred (sadhya).",
+      mHint: "ഹേതുവും സാധ്യവും തമ്മിലുള്ള സാർവത്രിക ബന്ധമായ വ്യാപ്തി."
+    },
+    {
+      q: "Nyāya philosophers analyzed error in order to:",
+      mQ: "ന്യായ തത്ത്വചിന്തകർ തെറ്റുകളെ (error) വിശകലനം ചെയ്തത് എന്തിനാണ്?",
+      opts: ["Improve valid cognition", "Increase confusion", "Reject perception", "Avoid debate"],
+      mOpts: ["ശരിയായ അറിവിനെ മെച്ചപ്പെടുത്താൻ (Improve valid cognition)", "ആശയക്കുഴപ്പം കൂട്ടാൻ", "പ്രത്യക്ഷത്തെ തള്ളിക്കളയാൻ", "തർക്കങ്ങൾ ഒഴിവാക്കാൻ"],
+      ans: 0,
+      hint: "Understanding illusion clarifies true knowledge.",
+      mHint: "ശരിയായ ജ്ഞാനത്തെ വേർതിരിച്ചറിയാൻ."
+    },
+    {
+      q: "Which pramāṇa is closest to AI sensor data?",
+      mQ: "എഐ സെൻസർ ഡാറ്റയോട് ഏറ്റവും അടുത്തുനിൽക്കുന്ന പ്രമാണം ഏതാണ്?",
+      opts: ["Perception (Pratyakṣa)", "Testimony", "Postulation", "Comparison"],
+      mOpts: ["പ്രത്യക്ഷം (Pratyakṣa / Perception)", "ശബ്ദം", "അർത്ഥാപത്തി", "ഉപമാനം"],
+      ans: 0,
+      hint: "Direct intake from cameras, radar, and lidar sensors.",
+      mHint: "സെൻസറുകൾ വഴി നേരിട്ട് വിവരങ്ങൾ ശേഖരിക്കുന്ന പ്രത്യക്ഷ അനുഭവം."
+    },
+    {
+      q: "Learning from patterns in data in AI is similar to:",
+      mQ: "ഡാറ്റയിലെ പാറ്റേണുകളിൽ നിന്ന് പഠിച്ചെടുക്കുന്ന എഐ രീതി ഏതിന് സമാനമാണ്?",
+      opts: ["Yoga", "Anumāna (inference)", "Worship", "Myth"],
+      mOpts: ["യോഗ", "അനുമാനം (Anumāna / Inference)", "പ്രാർത്ഥന", "ഐതിഹ്യം"],
+      ans: 1,
+      hint: "Inducing rules and relationships from observed patterns.",
+      mHint: "വിവരങ്ങളിൽ നിന്ന് യുക്തിസഹമായി നിഗമനത്തിലെത്തുന്ന അനുമാനം."
+    },
+    {
+      q: "Trusting information from a database in AI resembles:",
+      mQ: "ഒരു ഡാറ്റാബേസിലെ വിവരങ്ങളെ വിശ്വസിക്കുന്നത് ഏത് പ്രമാണത്തിന് സമാനമാണ്?",
+      opts: ["Illusion", "Śabda (testimony)", "Doubt", "Meditation"],
+      mOpts: ["ഭ്രമം", "ശബ്ദം / ആപ്തവചനം (Śabda / Testimony)", "സംശയം", "ധ്യാനം"],
+      ans: 1,
+      hint: "Relying on authoritative recorded testimony.",
+      mHint: "വിശ്വസനീയമായ രേഖകളെയോ ആപ്തവാക്യങ്ങളെയോ ആശ്രയിക്കുന്ന ശബ്ദപ്രമാണം."
+    },
+    {
+      q: "A major concern in both Indian epistemology and AI is:",
+      mQ: "ഭാരതീയ ജ്ഞാനശാസ്ത്രത്തിലും എഐയിലും ഒരുപോലെ പ്രാധാന്യമുള്ള വിഷയം ഏതാണ്?",
+      opts: ["Fashion", "Validity of knowledge", "Architecture", "Music"],
+      mOpts: ["ഫാഷൻ", "അറിവിന്റെ സാധുത (Validity of knowledge)", "വാസ്തുവിദ്യ", "സംഗീതം"],
+      ans: 1,
+      hint: "Ensuring output/cognition is authentic, reliable, and justified.",
+      mHint: "നേടുന്ന അറിവ് എത്രത്തോളം ശരിയും വിശ്വസനീയവുമാണെന്ന് ഉറപ്പാക്കൽ."
+    },
+    {
+      q: "Which of the following questions is central to epistemology?",
+      mQ: "ജ്ഞാനശാസ്ത്രത്തിന്റെ കേന്ദ്രബിന്ദുവായ ചോദ്യം ഏതാണ്?",
+      opts: ["What is beauty?", "What is justice?", "What can we know and how do we know it?", "What is the good life?"],
+      mOpts: ["സൗന്ദര്യം എന്നാൽ എന്താണ്?", "നീതി എന്നാൽ എന്താണ്?", "നമുക്ക് എന്തറിയാം, അതെങ്ങനെ അറിയാം?", "ഉത്തമ ജീവിതം എന്നാൽ എന്താണ്?"],
+      ans: 2,
+      hint: "Investigation into knowledge limits and mechanisms.",
+      mHint: "നമുക്ക് എന്തെല്ലാം അറിയാൻ സാധിക്കും, അറിവിന്റെ ഉറവിടങ്ങൾ ഏതാണ് എന്ന ചോദ്യം."
+    },
+    {
+      q: "Which philosopher is most closely associated with empiricism?",
+      mQ: "എംപിരിസിസവുമായി (Empiricism) ഏറ്റവും ബന്ധപ്പെട്ടിരിക്കുന്ന തത്ത്വചിന്തകൻ ആര്?",
+      opts: ["René Descartes", "Immanuel Kant", "John Locke", "G. W. F. Hegel"],
+      mOpts: ["റെനെ ഡെക്കാർട്ട്", "ഇമ്മാനുവൽ കാന്റ്", "ജോൺ ലോക്ക് (John Locke)", "ഹെഗൽ"],
+      ans: 2,
+      hint: "British empiricist who rejected innate ideas.",
+      mHint: "അനുഭവത്തിലൂടെ മാത്രമാണ് അറിവുണ്ടാകുന്നത് എന്ന് വാദിച്ച ചിന്തകൻ."
+    },
+    {
+      q: "According to John Locke, the human mind at birth is like:",
+      mQ: "ജോൺ ലോക്കിന്റെ അഭിപ്രായത്തിൽ ജനനസമയത്ത് മനുഷ്യന്റെ മനസ്സ് എന്തിനോട് തുല്യമാണ്?",
+      opts: ["A mirror", "A blank slate (tabula rasa)", "A rational structure", "A divine spark"],
+      mOpts: ["ഒരു കണ്ണാടി", "വെള്ളക്കടലാസ് / ശൂന്യമായ പ്രതലം (Tabula rasa)", "ഒരു യുക്തിസഹമായ ഘടന", "ദിവ്യമായ തീപ്പൊരി"],
+      ans: 1,
+      hint: "Tabula rasa.",
+      mHint: "ഒന്നും എഴുതാത്ത ശുദ്ധമായ ഒരു പ്രതലം."
+    },
+    {
+      q: "Identity Theory in the philosophy of mind claims that:",
+      mQ: "ഐഡന്റിറ്റി തിയറി (Identity Theory) വാദിക്കുന്നത് എന്താണ്?",
+      opts: ["Mental states are patterns of behavior", "Mental states are identical to brain states", "Mental states are illusions", "Mental states are non-physical substances"],
+      mOpts: ["മാനസികാവസ്ഥകൾ പെരുമാറ്റ രീതികളാണ്", "മാനസികാവസ്ഥകൾ തലച്ചോറിന്റെ അവസ്ഥകൾ തന്നെയാണ് (Brain states)", "മാനസികാവസ്ഥകൾ വെറും തോന്നലുകളാണ്", "മാനസികാവസ്ഥകൾ അഭൗതിക വസ്തുക്കളാണ്"],
+      ans: 1,
+      hint: "Mind states are brain neurophysiological processes.",
+      mHint: "മനസ്സിന്റെ അവസ്ഥകൾ തലച്ചോറിലെ അവസ്ഥകളുമായി പൂർണ്ണമായും ഒന്നാണ്."
+    },
+    {
+      q: "Identity Theory is also known as:",
+      mQ: "ഐഡന്റിറ്റി തിയറി ഏത് പേരിലും അറിയപ്പെടുന്നു?",
+      opts: ["Dualism", "Functionalism", "Mind-Brain Identity Theory", "Logical Positivism"],
+      mOpts: ["ദ്വൈതവാദം", "ഫങ്ഷണലിസം", "മൈൻഡ്-ബ്രെയിൻ ഐഡന്റിറ്റി തിയറി", "ലോജിക്കൽ പോസിറ്റിവിസം"],
+      ans: 2,
+      hint: "Mind-Brain Type Identity.",
+      mHint: "മനസ്സും മസ്തിഷ്കവും ഒന്നാണെന്ന സിദ്ധാന്തം."
+    },
+    {
+      q: "Which philosopher is most closely associated with the development of Identity Theory?",
+      mQ: "ഐഡന്റിറ്റി തിയറിയുടെ വികസനവുമായി ഏറ്റവും ബന്ധപ്പെട്ടിരിക്കുന്ന ചിന്തകൻ ആര്?",
+      opts: ["Gilbert Ryle", "J. J. C. Smart", "Hilary Putnam", "Daniel Dennett"],
+      mOpts: ["ഗിൽബർട്ട് റൈൽ", "ജെ. ജെ. സി. സ്മാർട്ട് (J. J. C. Smart)", "ഹിലരി പുട്ട്നം", "ഡാനിയൽ ഡെന്നറ്റ്"],
+      ans: 1,
+      hint: "Australian philosopher who defended sensations as brain processes.",
+      mHint: "ഓസ്ട്രേലിയൻ ഫിലോസഫറായ സ്മാർട്ട്."
+    },
+    {
+      q: "Functionalism defines mental states mainly in terms of their:",
+      mQ: "ഫങ്ഷണലിസം മാനസികാവസ്ഥകളെ നിർവ്വചിക്കുന്നത് പ്രധാനമായും എന്തിന്റെ അടിസ്ഥാനത്തിലാണ്?",
+      opts: ["Chemical composition", "Physical location", "Causal roles/relations", "Spiritual nature"],
+      mOpts: ["രാസഘടന", "ഭൗതിക സ്ഥാനം", "കാര്യകാരണ ബന്ധങ്ങൾ / പ്രവർത്തന പങ്ക് (Causal roles)", "ആത്മീയ സ്വഭാവം"],
+      ans: 2,
+      hint: "What they do rather than what they are made of.",
+      mHint: "അവ ചെയ്യുന്ന പ്രവർത്തനങ്ങളുടെയും കാര്യകാരണ ബന്ധങ്ങളുടെയും അടിസ്ഥാനത്തിൽ."
+    },
+    {
+      q: "Functionalism emerged largely as an alternative to:",
+      mQ: "ഫങ്ഷണലിസം പ്രധാനമായും ഏതിനൊരു ബദലായാണ് ഉയർന്നുവന്നത്?",
+      opts: ["Dualism only", "Identity theory and behaviorism", "Pragmatism", "Existentialism"],
+      mOpts: ["ഡ്യുവലിസത്തിന് മാത്രം", "ഐഡന്റിറ്റി തിയറിക്കും ബിഹേവിയറിസത്തിനും", "പ്രാഗ്മാറ്റിസത്തിന്", "എക്സിസ്റ്റെൻഷ്യലിസത്തിന്"],
+      ans: 1,
+      hint: "Reconciling behaviorism's insight without physical brain chauvinism.",
+      mHint: "ഐഡന്റിറ്റി തിയറിയുടെയും ബിഹേവിയറിസത്തിന്റെയും പരിമിതികൾ പരിഹരിക്കാൻ."
+    },
+    {
+      q: "According to functionalism, a mental state is identified by:",
+      mQ: "ഫങ്ഷണലിസമനുസരിച്ച് ഒരു മാനസികാവസ്ഥ തിരിച്ചറിയപ്പെടുന്നത് എങ്ങനെയാണ്?",
+      opts: ["Brain tissue", "Input-output relations", "Personal feelings only", "Moral value"],
+      mOpts: ["തലച്ചോറിലെ കോശങ്ങൾ കൊണ്ട്", "ഇൻപുട്ട്-ഔട്ട്പുട്ട് ബന്ധങ്ങൾ വഴി (Input-output relations)", "വ്യക്തിപരമായ വികാരങ്ങൾ കൊണ്ട്", "ധാർമ്മിക മൂല്യം കൊണ്ട്"],
+      ans: 1,
+      hint: "Mediation between sensory inputs and behavioral outputs.",
+      mHint: "ഇൻപുട്ടുകളും ഔട്ട്പുട്ടുകളും തമ്മിലുള്ള പ്രവർത്തനങ്ങൾ വഴി."
+    },
+    {
+      q: "The idea that the same mental state can exist in different physical systems is called:",
+      mQ: "ഒരേ മാനസികാവസ്ഥ വ്യത്യസ്ത ഭൗതിക സംവിധാനങ്ങളിൽ നിലനിൽക്കാം എന്ന ആശയം അറിയപ്പെടുന്നത്:",
+      opts: ["Supervenience", "Eliminativism", "Multiple realization", "Parallelism"],
+      mOpts: ["സൂപ്പർവീനിയൻസ്", "എലിമിനേറ്റിവിസം", "മൾട്ടിപ്പിൾ റിയലൈസേഷൻ (Multiple realization)", "പാരലലിസം"],
+      ans: 2,
+      hint: "Silicon computers, aliens, or biological brains having the same mental state.",
+      mHint: "തലച്ചോറിലും കമ്പ്യൂട്ടറിലും ഒരേ മാനസിക ധർമ്മം പ്രവർത്തിക്കാം എന്ന ആശയം."
+    },
+    {
+      q: "Which philosopher is strongly associated with functionalism?",
+      mQ: "ഫങ്ഷണലിസവുമായി ശക്തമായി ബന്ധപ്പെട്ടിരിക്കുന്ന തത്ത്വചിന്തകൻ ആര്?",
+      opts: ["B. F. Skinner", "Hilary Putnam", "René Descartes", "David Hume"],
+      mOpts: ["ബി. എഫ്. സ്കിന്നർ", "ഹിലരി പുട്ട്നം (Hilary Putnam)", "റെനെ ഡെക്കാർട്ട്", "ഡേവിഡ് ഹ്യൂം"],
+      ans: 1,
+      hint: "Introduced machine-state functionalism.",
+      mHint: "മെഷീൻ സ്റ്റേറ്റ് ഫങ്ഷണലിസം മുന്നോട്ട് വെച്ച ചിന്തകൻ."
+    },
+    {
+      q: "Functionalism compared the mind to a:",
+      mQ: "ഫങ്ഷണലിസം മനസ്സിനെ താരതമ്യപ്പെടുത്തിയത് എന്തിനോടാണ്?",
+      opts: ["Dream", "Computer program", "Soul", "Reflex"],
+      mOpts: ["സ്വപ്നം", "കമ്പ്യൂട്ടർ പ്രോഗ്രാം (Computer program)", "ആത്മാവ്", "റിഫ്ലെക്സ്"],
+      ans: 1,
+      hint: "Mind is to brain as software is to hardware.",
+      mHint: "ഹാർഡ്‌വെയറിലെ സോഫ്റ്റ്‌വെയർ അഥവാ കമ്പ്യൂട്ടർ പ്രോഗ്രാമിനോട്."
+    },
+    {
+      q: "Philosophical behaviorism claims that:",
+      mQ: "ഫിലോസഫിക്കൽ ബിഹേവിയറിസം വാദിക്കുന്നത് എന്താണ്?",
+      opts: ["Mental states are identical to brain states", "Mental states are patterns of behavior or dispositions to behave", "Mental states are private and ineffable", "Mental states are illusions"],
+      mOpts: ["മാനസികാവസ്ഥകൾ മസ്തിഷ്ക അവസ്ഥകളാണ്", "മാനസികാവസ്ഥകൾ ബാഹ്യ പെരുമാറ്റങ്ങളോ പെരുമാറാനുള്ള പ്രവണതകളോ ആണ്", "മാനസികാവസ്ഥകൾ സ്വകാര്യമാണ്", "മാനസികാവസ്ഥകൾ വെറും തോന്നലുകളാണ്"],
+      ans: 1,
+      hint: "Dispositions to act publicly.",
+      mHint: "മനസ്സ് എന്നത് ബാഹ്യമായി കാണുന്ന പെരുമാറ്റരീതികളാണ്."
+    },
+    {
+      q: "Who is most closely associated with philosophical behaviorism?",
+      mQ: "ഫിലോസഫിക്കൽ ബിഹേവിയറിസവുമായി ഏറ്റവും അടുത്ത ബന്ധമുള്ള ചിന്തകൻ ആര്?",
+      opts: ["J. J. C. Smart", "Gilbert Ryle", "Hilary Putnam", "Jerry Fodor"],
+      mOpts: ["സ്മാർട്ട്", "ഗിൽബർട്ട് റൈൽ (Gilbert Ryle)", "ഹിലരി പുട്ട്നം", "ജെറി ഫോഡോർ"],
+      ans: 1,
+      hint: "Oxford philosopher who attacked the 'ghost in the machine'.",
+      mHint: "'ദ കൺസെപ്റ്റ് ഓഫ് മൈൻഡ്' എഴുതിയ ഓക്സ്ഫോർഡ് പ്രൊഫസർ."
+    },
+    {
+      q: "Which book by Gilbert Ryle criticized Cartesian dualism?",
+      mQ: "കാർട്ടീഷ്യൻ ഡ്യുവലിസത്തെ വിമർശിച്ചുകൊണ്ട് ഗിൽബർട്ട് റൈൽ എഴുതിയ പുസ്തകം ഏത്?",
+      opts: ["Being and Nothingness", "The Concept of Mind", "Philosophical Investigations", "Mind and World"],
+      mOpts: ["ബീയിംഗ് ആൻഡ് നതിങ്‌നെസ്സ്", "ദ കൺസെപ്റ്റ് ഓഫ് മൈൻഡ് (The Concept of Mind)", "ഫിലോസഫിക്കൽ ഇൻവെസ്റ്റിഗേഷൻസ്", "മൈൻഡ് ആൻഡ് വേൾഡ്"],
+      ans: 1,
+      hint: "Published in 1949 analyzing category mistakes.",
+      mHint: "കാറ്റഗറി മിസ്റ്റേക്ക് ചൂണ്ടിക്കാണിച്ച പ്രസിദ്ധ ഗ്രന്ഥം."
+    },
+    {
+      q: "The idea that the mind is a \"ghost in the machine\" was criticized by:",
+      mQ: "മനസ്സ് ഒരു \"യന്ത്രത്തിനുള്ളിലെ പ്രേതമാണ്\" (ghost in the machine) എന്ന സങ്കൽപ്പത്തെ വിമർശിച്ചത് ആര്?",
+      opts: ["Descartes", "Ryle", "Hume", "Kant"],
+      mOpts: ["ഡെക്കാർട്ട്", "ഗിൽബർട്ട് റൈൽ (Ryle)", "ഹ്യൂം", "കാന്റ്"],
+      ans: 1,
+      hint: "Coined the phrase to mock Cartesian substance dualism.",
+      mHint: "ഡെക്കാർട്ടിന്റെ ആശയത്തെ തള്ളിപ്പറഞ്ഞ ചിന്തകൻ."
+    },
+    {
+      q: "Which theory holds that mental states can be fully explained without reference to inner experiences?",
+      mQ: "ആന്തരിക അനുഭവങ്ങളെ ആശ്രയിക്കാതെ തന്നെ മാനസികാവസ്ഥകളെ വിശദീകരിക്കാം എന്ന് കരുതുന്ന സിദ്ധാന്തം ഏത്?",
+      opts: ["Functionalism", "Identity Theory", "Behaviorism", "Dualism"],
+      mOpts: ["ഫങ്ഷണലിസം", "ഐഡന്റിറ്റി തിയറി", "ബിഹേവിയറിസം (Behaviorism)", "ഡ്യുവലിസം"],
+      ans: 2,
+      hint: "Focuses strictly on observable actions and dispositions.",
+      mHint: "ബാഹ്യ പെരുമാറ്റങ്ങൾക്ക് മാത്രം പ്രാധാന്യം നൽകുന്ന വാദം."
+    },
+    {
+      q: "In AI research, what challenge parallels the mind-body problem in philosophy?",
+      mQ: "തത്ത്വചിന്തയിലെ മൈൻഡ്-ബോഡി പ്രശ്നത്തിന് സമാനമായി എഐയിലുള്ള വെല്ലുവിളി ഏതാണ്?",
+      opts: ["Symbolic grounding problem", "Turing test", "Machine learning optimization", "Database normalization"],
+      mOpts: ["സിംബോളിക് ഗ്രൗണ്ടിംഗ് പ്രോബ്ലം (Symbolic grounding problem)", "ടൂറിംഗ് ടെസ്റ്റ്", "മെഷീൻ ലേണിംഗ് ഒപ്റ്റിമൈസേഷൻ", "ഡാറ്റാബേസ് നോർമലൈസേഷൻ"],
+      ans: 0,
+      hint: "How abstract symbols attach real physical meaning to the outside world.",
+      mHint: "ചിഹ്നങ്ങൾക്ക് ഭൗതിക ലോകവുമായി അർത്ഥം എങ്ങനെ ബന്ധിപ്പിക്കുന്നു എന്ന പ്രശ്നം."
+    },
+    {
+      q: "How can a system illustrate behaviorist ideas?",
+      mQ: "ഒരു സിസ്റ്റത്തിന് ബിഹേവിയറിസ്റ്റ് ആശയങ്ങളെ എങ്ങനെ ചിത്രീകരിക്കാൻ കഴിയും?",
+      opts: ["By stimulating subjective experience", "By showing intelligent behavior based on input and rules", "By having consciousness like humans", "By developing emotions independently"],
+      mOpts: ["വ്യക്തിപരമായ അനുഭവങ്ങൾ അനുകരിച്ചുകൊണ്ട്", "ഇൻപുട്ടിന്റെയും നിയമങ്ങളുടെയും അടിസ്ഥാനത്തിൽ ബുദ്ധിപരമായ പെരുമാറ്റം പ്രകടിപ്പിച്ചുകൊണ്ട്", "മനുഷ്യരെപ്പോലെ ബോധമുണ്ടാക്കിക്കൊണ്ട്", "വികാരങ്ങൾ സ്വയം വികസിപ്പിച്ചുകൊണ്ട്"],
+      ans: 1,
+      hint: "External stimulus-response fidelity.",
+      mHint: "ഇൻപുട്ടുകൾക്കനുസരിച്ച് കൃത്യമായ പ്രതികരണങ്ങളും പെരുമാറ്റങ്ങളും നൽകി."
+    },
+    {
+      q: "What is the main goal of AI alignment?",
+      mQ: "എഐ അലൈൻമെന്റിന്റെ (AI Alignment) പ്രധാന ലക്ഷ്യം എന്താണ്?",
+      opts: ["To make AI systems faster and more efficient", "To ensure AI systems act according to human values and intentions", "To increase AI autonomy without supervision", "To reduce the cost of AI development"],
+      mOpts: ["എഐയുടെ വേഗത വർദ്ധിപ്പിക്കുക", "എഐ സംവിധാനങ്ങൾ മനുഷ്യ മൂല്യങ്ങൾക്കും ഉദ്ദേശ്യങ്ങൾക്കും അനുസൃതമായി പ്രവർത്തിക്കുന്നുവെന്ന് ഉറപ്പാക്കുക", "നിയന്ത്രണങ്ങളില്ലാതെ എഐയുടെ സ്വയംഭരണം കൂട്ടുക", "നിർമ്മാണച്ചെലവ് കുറയ്ക്കുക"],
+      ans: 1,
+      hint: "Matching machine goals with human goals and ethics.",
+      mHint: "മനുഷ്യന്റെ മൂല്യങ്ങളോടും ലക്ഷ്യങ്ങളോടും എഐ ചേർന്നുനിൽക്കുന്നുവെന്ന് ഉറപ്പാക്കൽ."
+    },
+    {
+      q: "Why is embedding human values important in AI systems?",
+      mQ: "എഐ സംവിധാനങ്ങളിൽ മനുഷ്യ മൂല്യങ്ങൾ ഉൾപ്പെടുത്തുന്നത് പ്രധാനമായിരിക്കുന്നത് എന്തുകൊണ്ട്?",
+      opts: ["To make AI systems faster and more profitable", "To increase AI autonomy without ethical constraints", "To reduce the need for human oversight", "To ensure AI respects human dignity, safety, fairness, and well-being"],
+      mOpts: ["സിസ്റ്റം കൂടുതൽ വേഗതയുള്ളതും ലാഭകരവുമാക്കാൻ", "ധാർമ്മിക നിയന്ത്രണങ്ങളില്ലാതെ സ്വയംഭരണം നൽകാൻ", "മനുഷ്യന്റെ മേൽനോട്ടം കുറയ്ക്കാൻ", "മനുഷ്യന്റെ അന്തസ്സ്, സുരക്ഷ, നീതി, ക്ഷേമം എന്നിവ സംരക്ഷിക്കാൻ"],
+      ans: 3,
+      hint: "Safety, ethics, and human flourishing.",
+      mHint: "മനുഷ്യന്റെ സുരക്ഷയും നീതിയും ധാർമ്മികതയും കാത്തുസൂക്ഷിക്കാൻ."
+    },
+    {
+      q: "Continuous monitoring of AI systems is important because:",
+      mQ: "എഐ സംവിധാനങ്ങളെ നിരന്തരം നിരീക്ഷിക്കുന്നത് പ്രധാനമായിരിക്കുന്നത് എന്തുകൊണ്ട്?",
+      opts: ["AI systems may drift from human-aligned behavior over time", "AI goals never change", "Humans can delegate all responsibility to AI", "Monitoring slows down AI efficiency"],
+      mOpts: ["കാലക്രമേണ എഐ ഉദ്ദേശിച്ച മൂല്യങ്ങളിൽ നിന്ന് വ്യതിചലിച്ചേക്കാം (Drift)", "എഐ ലക്ഷ്യങ്ങൾ ഒരിക്കലും മാറില്ല", "മനുഷ്യന് പൂർണ്ണ ഉത്തരവാദിത്തം എഐക്ക് നൽകാം", "നിരീക്ഷണം കാര്യക്ഷമത കുറയ്ക്കുന്നു"],
+      ans: 0,
+      hint: "Model drift and unintended behavioral changes over time.",
+      mHint: "കാലക്രമേണ എഐ സ്വഭാവത്തിലുണ്ടാകുന്ന മാറ്റങ്ങൾ തടയാൻ."
+    },
+    {
+      q: "What is the primary purpose of transparency and explainability in AI?",
+      mQ: "എഐയിലെ സുതാര്യതയുടെയും വിശദീകരിക്കാനുള്ള കഴിവിന്റെയും (Explainability) പ്രധാന ഉദ്ദേശ്യം എന്താണ്?",
+      opts: ["To hide AI decision-making processes from users", "To increase AI processing speed", "To make AI decisions visible, understandable, accountable, and trustworthy", "To allow AI to act independently without human oversight"],
+      mOpts: ["തീരുമാനങ്ങൾ ഉപയോക്താക്കളിൽ നിന്ന് മറച്ചുവെക്കാൻ", "വേഗത വർദ്ധിപ്പിക്കാൻ", "എഐ തീരുമാനങ്ങൾ വ്യക്തവും വിശ്വസനീയവും ഉത്തരവാദിത്തമുള്ളതുമാക്കാൻ", "മേൽനോട്ടമില്ലാതെ പ്രവർത്തിക്കാൻ അനുവദിക്കാൻ"],
+      ans: 2,
+      hint: "Accountability and understanding of black-box algorithms.",
+      mHint: "എഐയുടെ തീരുമാനങ്ങൾക്ക് പിന്നിലെ കാരണങ്ങൾ മനസ്സിലാക്കാനും വിശ്വാസ്യത ഉറപ്പാക്കാനും."
+    },
+    {
+      q: "What is a major concern associated with superintelligent AI as an existential threat?",
+      mQ: "സൂപ്പർ ഇന്റലിജന്റ് എഐ മനുഷ്യരാശിക്ക് ഭീഷണിയാകാം എന്ന ആശങ്കയ്ക്ക് പ്രധാന കാരണം എന്താണ്?",
+      opts: ["It may be slower than human intelligence.", "It might pursue goals misaligned with human values.", "It cannot process large datasets efficiently.", "It requires human supervision for all tasks."],
+      mOpts: ["അതിന് മനുഷ്യനേക്കാൾ വേഗത കുറവായിരിക്കും", "അത് മനുഷ്യ മൂല്യങ്ങൾക്ക് നിരക്കാത്ത ലക്ഷ്യങ്ങൾ പിന്തുടർന്നേക്കാം", "വലിയ ഡാറ്റ പ്രോസസ്സ് ചെയ്യാൻ കഴിയില്ല", "എല്ലാത്തിനും മനുഷ്യന്റെ സഹായം വേണം"],
+      ans: 1,
+      hint: "Goal misalignment at superhuman capability.",
+      mHint: "നമ്മുടെ മൂല്യങ്ങൾക്ക് വിരുദ്ധമായ ലക്ഷ്യങ്ങൾ എഐ സ്വയം തിരഞ്ഞെടുത്തേക്കാം."
+    },
+    {
+      q: "Why is the concept of \"autonomy\" in AI relevant to existential threats?",
+      mQ: "എഐയിലെ സ്വയംഭരണാധികാരം (Autonomy) നിലനിൽപ്പിന്റെ ഭീഷണിയുമായി ബന്ധപ്പെട്ടിരിക്കുന്നത് എന്തുകൊണ്ട്?",
+      opts: ["Autonomous AI is always safe.", "Autonomous AI cannot learn new tasks", "Autonomy reduces the need for computing resources.", "Greater autonomy allows AI to act independently"],
+      mOpts: ["സ്വയംഭരണ എഐ എപ്പോഴും സുരക്ഷിതമാണ്", "അതിന് പുതിയ കാര്യങ്ങൾ പഠിക്കാൻ കഴിയില്ല", "കമ്പ്യൂട്ടിംഗ് വിഭവങ്ങൾ കുറച്ചുമതി", "കൂടുതൽ സ്വയംഭരണം എഐയെ സ്വതന്ത്രമായി പ്രവർത്തിക്കാൻ അനുവദിക്കുന്നു"],
+      ans: 3,
+      hint: "Acting outside human control and intervention.",
+      mHint: "മനുഷ്യന്റെ നിയന്ത്രണമില്ലാതെ സ്വതന്ത്രമായി തീരുമാനമെടുക്കാൻ സാധിക്കുന്നത് കൊണ്ട്."
+    },
+    {
+      q: "What does AGI (Artificial General Intelligence) refer to?",
+      mQ: "എജിഐ (Artificial General Intelligence) എന്നാൽ എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
+      opts: ["AI specialized in one task, like chess or translation", "AI with humanlike general intelligence across domains / can perform any intellectual task a human can", "Simple rule-based systems", "Automated data storage"],
+      mOpts: ["ചെസ്സ് അല്ലെങ്കിൽ വിവർത്തനം പോലുള്ള ഒരു പ്രത്യേക കാര്യത്തിന് മാത്രമുള്ള എഐ", "മനുഷ്യനെപ്പോലെ എല്ലാ മേഖലകളിലും പൊതുവായ ബുദ്ധി പ്രകടിപ്പിക്കാൻ കഴിയുന്ന എഐ", "ലളിതമായ റൂൾ-ബേസ്ഡ് സിസ്റ്റം", "ഓട്ടോമേറ്റഡ് ഡാറ്റ സംഭരണം"],
+      ans: 1,
+      hint: "Broad cross-domain human-level cognitive ability.",
+      mHint: "മനുഷ്യനെപ്പോലെ ഏത് മേഖലയിലെയും പ്രശ്നങ്ങൾ പഠിക്കാനും പരിഹരിക്കാനും കഴിയുന്ന സിസ്റ്റം."
+    },
+    {
+      q: "Why is AGI considered \"far\" or a distant goal?",
+      mQ: "എജിഐ ഇനിയും ഒരുപാട് അകലെയാണെന്ന് കരുതപ്പെടാൻ കാരണം എന്താണ്?",
+      opts: ["Because AI cannot play games efficiently", "Because humans do not want AGI", "Because current AI lacks understanding, reasoning, and common sense", "Because computers are too expensive"],
+      mOpts: ["ഗെയിമുകൾ കളിക്കാൻ എഐക്ക് കഴിയില്ല എന്നതുകൊണ്ട്", "മനുഷ്യർക്ക് എജിഐ വേണ്ടാത്തതുകൊണ്ട്", "ഇപ്പോഴത്തെ എഐക്ക് യഥാർത്ഥ ധാരണയും യുക്തിയും സാമാന്യബുദ്ധിയും ഇല്ലാത്തതുകൊണ്ട്", "കമ്പ്യൂട്ടറുകൾക്ക് വില കൂടുതലായതുകൊണ്ട്"],
+      ans: 2,
+      hint: "Narrow capabilities lack true common sense and cognitive breadth.",
+      mHint: "സാധാരണ വിവേകവും കാര്യങ്ങൾ സ്വയം മനസ്സിലാക്കാനുള്ള കഴിവും ഇപ്പോഴത്തെ എഐക്കില്ല."
+    },
+    {
+      q: "How does the lack of autonomy in AI relate to AGI being far?",
+      mQ: "എഐയിലെ സ്വയംഭരണാധികാരത്തിന്റെ കുറവ് എജിഐ അകലെയാണ് എന്നതുമായി എങ്ങനെ ബന്ധപ്പെട്ടിരിക്കുന്നു?",
+      opts: ["AI can already act completely independently", "AI needs human supervision and cannot self-direct learning across domains", "AI is too autonomous for safety", "AI autonomy makes it easier to achieve AGI"],
+      mOpts: ["എഐ പൂർണ്ണമായും സ്വതന്ത്രമായി പ്രവർത്തിക്കുന്നുണ്ട്", "എഐക്ക് മനുഷ്യന്റെ മേൽനോട്ടം ആവശ്യമാണ്, സ്വയം പഠിക്കാൻ കഴിയില്ല", "എഐ കൂടുതൽ സ്വയംഭരണമുള്ളതാണ്", "സ്വയംഭരണം എജിഐ നേടാൻ എളുപ്പമാക്കുന്നു"],
+      ans: 1,
+      hint: "Requires human engineering and guidance across domains.",
+      mHint: "സ്വയം പുതിയ മേഖലകൾ പഠിച്ചെടുക്കാൻ ഇപ്പോഴത്തെ എഐ സംവിധാനങ്ങൾക്ക് സാധിക്കില്ല."
+    },
+    {
+      q: "The primary reason learning algorithms acquire moral bias is:",
+      mQ: "മെഷീൻ ലേണിംഗ് അൽഗോരിതങ്ങളിൽ ധാർമ്മിക പക്ഷപാതം (Bias) ഉണ്ടാകാനുള്ള പ്രധാന കാരണം:",
+      opts: ["High computational power", "Learning from historically biased data", "Excessive model accuracy", "Lack of automation"],
+      mOpts: ["ഉയർന്ന കമ്പ്യൂട്ടേഷണൽ പവർ", "ചരിത്രപരമായി പക്ഷപാതമുള്ള മുൻ ഡാറ്റയിൽ നിന്ന് പഠിക്കുന്നത് കൊണ്ട്", "അമിതമായ കൃത്യത", "ഓട്ടോമേഷൻ ഇല്ലാത്തത്"],
+      ans: 1,
+      hint: "Garbage in, garbage out from historical societal inequities.",
+      mHint: "സമൂഹത്തിലെ പഴയ പക്ഷപാതങ്ങൾ അടങ്ങിയ ഡാറ്റയിൽ നിന്ന് പഠിച്ചെടുക്കുന്നത് വഴി."
+    },
+    {
+      q: "Which of the following helps directly detect algorithmic bias?",
+      mQ: "അൽഗോരിതങ്ങളിലെ പക്ഷപാതം നേരിട്ട് കണ്ടെത്താൻ സഹായിക്കുന്നത് ഏതാണ്?",
+      opts: ["Increasing dataset size", "Bias and fairness audits", "Faster processors", "Encryption"],
+      mOpts: ["ഡാറ്റാസെറ്റിന്റെ വലുപ്പം കൂട്ടൽ", "ബയാസ് ആൻഡ് ഫെയർനെസ് ഓഡിറ്റുകൾ (Bias & fairness audits)", "വേഗതയേറിയ പ്രോസസറുകൾ", "എൻക്രിപ്ഷൻ"],
+      ans: 1,
+      hint: "Structured empirical reviews of model predictions across demographic groups.",
+      mHint: "മോഡലുകളുടെ നീതിപൂർവ്വമായ പ്രവർത്തനം ഓഡിറ്റ് ചെയ്യുക."
+    },
+    {
+      q: "Embedding fairness constraints into a model relates to:",
+      mQ: "ഒരു എഐ മോഡലിൽ നീതിപൂർവ്വമായ നിയന്ത്രണങ്ങൾ (Fairness constraints) ഉൾപ്പെടുത്തുന്നത് ഏതുമായി ബന്ധപ്പെട്ടിരിക്കുന്നു?",
+      opts: ["Data storage", "Ethical governance", "Algorithm design / Ethical optimization", "User feedback"],
+      mOpts: ["ഡാറ്റ സംഭരണം", "എത്തിക്കൽ ഗവേണൻസ്", "അൽഗോരിതം ഡിസൈൻ / എത്തിക്കൽ ഒപ്റ്റിമൈസേഷൻ", "യൂസർ ഫീഡ്‌ബാക്ക്"],
+      ans: 2,
+      hint: "Designing math loss functions that penalize unfair outcomes.",
+      mHint: "അൽഗോരിതം രൂപകൽപ്പന ചെയ്യുന്ന ഘട്ടത്തിൽ തന്നെ ധാർമ്മികത ഉറപ്പാക്കൽ."
+    },
+    {
+      q: "Bias that emerges after deployment is best addressed through:",
+      mQ: "സിസ്റ്റം പ്രവർത്തനക്ഷമമായതിന് ശേഷം ഉണ്ടാകുന്ന പക്ഷപാതങ്ങൾ എങ്ങനെയാണ് പരിഹരിക്കേണ്ടത്?",
+      opts: ["One-time training", "Ignoring edge cases", "Continuous monitoring and updates", "Removing the system"],
+      mOpts: ["ഒറ്റത്തവണയുള്ള പരിശീലനം കൊണ്ട്", "പ്രശ്നങ്ങൾ അവഗണിച്ചുകൊണ്ട്", "തുടർച്ചയായ നിരീക്ഷണവും അപ്‌ഡേറ്റുകളും വഴി", "സിസ്റ്റം പൂർണ്ണമായി ഒഴിവാക്കിക്കൊണ്ട്"],
+      ans: 2,
+      hint: "Ongoing feedback loops and performance tracking.",
+      mHint: "തുടർ നിരീക്ഷണങ്ങളും ആവശ്യമായ മാറ്റങ്ങളും വരുത്തിക്കൊണ്ട്."
+    },
+    {
+      q: "Optimizing AI systems only for accuracy may lead to:",
+      mQ: "എഐ സംവിധാനങ്ങളെ കേവലം കൃത്യതയ്ക്ക് (Accuracy) വേണ്ടി മാത്രം രൂപകൽപ്പന ചെയ്താൽ എന്ത് സംഭവിച്ചേക്കാം?",
+      opts: ["Fairer outcomes", "Reduced bias", "Amplification of existing social biases / social order", "Perfect neutrality"],
+      mOpts: ["നീതിപൂർവ്വമായ ഫലങ്ങൾ", "പക്ഷപാതം കുറയൽ", "നിലവിലുള്ള സാമൂഹിക പക്ഷപാതങ്ങൾ കൂടുതൽ ശക്തമാകൽ", "പൂർണ്ണ നിഷ്പക്ഷത"],
+      ans: 2,
+      hint: "Reinforcing historical discriminatory base rates.",
+      mHint: "പഴയ സാമൂഹിക അസമത്വങ്ങൾ സിസ്റ്റം വീണ്ടും ശരിവെച്ചേക്കാം."
+    },
+    {
+      q: "Ethical optimization of AI mainly focuses on:",
+      mQ: "എഐയുടെ എത്തിക്കൽ ഒപ്റ്റിമൈസേഷൻ പ്രധാനമായും ശ്രദ്ധ കേന്ദ്രീകരിക്കുന്നത് എന്തിലാണ്?",
+      opts: ["Maximizing speed and efficiency only", "Reducing computational cost", "Aligning AI goals with ethical values and human well-being", "Replacing human decision making"],
+      mOpts: ["വേഗതയും കാര്യക്ഷമതയും കൂട്ടാൻ മാത്രം", "ചെലവ് കുറയ്ക്കാൻ", "എഐയുടെ ലക്ഷ്യങ്ങളെ മനുഷ്യന്റെ ധാർമ്മിക മൂല്യങ്ങളോടും ക്ഷേമത്തോടും പൊരുത്തപ്പെടുത്താൻ", "തീരുമാനങ്ങളിൽ നിന്ന് മനുഷ്യരെ പൂർണ്ണമായി ഒഴിവാക്കാൻ"],
+      ans: 2,
+      hint: "Aligning optimization parameters with moral norms.",
+      mHint: "മനുഷ്യന്റെ ക്ഷേമവും ധാർമ്മികതയും ഉറപ്പാക്കുന്ന രീതിയിൽ സിസ്റ്റം ക്രമീകരിക്കൽ."
+    },
+    {
+      q: "Ethical optimization helps prevent which of the following problems in AI systems?",
+      mQ: "എത്തിക്കൽ ഒപ്റ്റിമൈസേഷൻ താഴെ പറയുന്നവയിൽ ഏതെല്ലാം പ്രശ്നങ്ങൾ തടയാൻ സഹായിക്കുന്നു?",
+      opts: ["Algorithm-based bias", "Discrimination", "Harmful or unsafe outcomes", "All of the above"],
+      mOpts: ["അൽഗോരിതം പക്ഷപാതം", "വിവേചനം", "ദോഷകരമായ ഫലങ്ങൾ", "മേൽപ്പറഞ്ഞവയെല്ലാം (All of the above)"],
+      ans: 3,
+      hint: "Mitigates all facets of algorithmic risks and unfairness.",
+      mHint: "പക്ഷപാതം, വിവേചനം, അപകടങ്ങൾ എന്നിവയെല്ലാം ഒരുപോലെ തടയുന്നു."
+    },
+    {
+      q: "Embedding ethics into AI design from the start is called:",
+      mQ: "എഐ സിസ്റ്റം നിർമ്മിക്കുമ്പോൾ തന്നെ അതിന്റെ തുടക്കം മുതൽ ധാർമ്മികത ഉൾക്കൊള്ളിക്കുന്ന രീതിക്ക് പറയുന്ന പേര്:",
+      opts: ["Impact Assessment", "Security and Resilience", "Ethics-by-Design", "Social Mediation"],
+      mOpts: ["ഇംപാക്റ്റ് അസസ്സ്മെന്റ്", "സുരക്ഷയും പ്രതിരോധവും", "എത്തിക്സ്-ബൈ-ഡിസൈൻ (Ethics-by-Design)", "സോഷ്യൽ മീഡിയേഷൻ"],
+      ans: 2,
+      hint: "Proactive integration into the software lifecycle.",
+      mHint: "രൂപകൽപ്പനയുടെ ആദ്യഘട്ടം മുതൽ ധാർമ്മികത ഉൾപ്പെടുത്തൽ."
+    },
+    {
+      q: "Conducting an evaluation of potential social, ethical, and legal consequences before deploying AI is known as:",
+      mQ: "എഐ പുറത്തിറക്കുന്നതിന് മുൻപ് അതിന്റെ സാമൂഹിക, ധാർമ്മിക, നിയമപരമായ പ്രത്യാഘാതങ്ങൾ വിലയിരുത്തുന്ന രീതി:",
+      opts: ["Impact Assessment", "Social Mediation", "Data Mining", "Ethics-by-Design"],
+      mOpts: ["ഇംപാക്റ്റ് അസസ്സ്മെന്റ് (Impact Assessment)", "സോഷ്യൽ മീഡിയേഷൻ", "ഡാറ്റ മൈനിംഗ്", "എത്തിക്സ്-ബൈ-ഡിസൈൻ"],
+      ans: 0,
+      hint: "Systematic pre-deployment risk analysis.",
+      mHint: "സാമൂഹിക ആഘാതങ്ങളെക്കുറിച്ച് മുൻകൂട്ടി നടത്തുന്ന പഠനം."
+    },
+    {
+      q: "Which principle ensures that a self-driving car's decision can be understood and explained?",
+      mQ: "ഒരു സെൽഫ് ഡ്രൈവിംഗ് കാറിന്റെ തീരുമാനം മറ്റുള്ളവർക്ക് മനസ്സിലാകാനും വിശദീകരിക്കാനും സാധിക്കുമെന്ന് ഉറപ്പാക്കുന്ന തത്ത്വം ഏത്?",
+      opts: ["Automation", "Transparency", "Efficiency", "Autonomy"],
+      mOpts: ["ഓട്ടോമേഷൻ", "സുതാര്യത (Transparency)", "കാര്യക്ഷമത", "സ്വയംഭരണം"],
+      ans: 1,
+      hint: "Openness and explainability.",
+      mHint: "തീരുമാനങ്ങൾ വ്യക്തമായി അറിയാൻ സഹായിക്കുന്ന സുതാര്യത."
+    },
+    {
+      q: "What should be the highest ethical priority for a self-driving car?",
+      mQ: "ഒരു ഓട്ടോണമസ് കാറിന് നൽകേണ്ട ഏറ്റവും ഉയർന്ന ധാർമ്മിക മുൻഗണന എന്തായിരിക്കണം?",
+      opts: ["Maximizing profit for manufacturers", "Improving travel speed", "Ensuring human safety", "Reducing fuel consumption"],
+      mOpts: ["നിർമ്മാതാക്കളുടെ ലാഭം കൂട്ടുക", "യാത്രാ വേഗത കൂട്ടുക", "മനുഷ്യന്റെ സുരക്ഷ ഉറപ്പാക്കുക (Ensuring human safety)", "ഇന്ധന ഉപഭോഗം കുറയ്ക്കുക"],
+      ans: 2,
+      hint: "Preservation of human life and well-being.",
+      mHint: "മനുഷ്യ ജീവനും സുരക്ഷയ്ക്കും നൽകുന്ന പരമപ്രാധാന്യം."
+    },
+    {
+      q: "What ethical practice helps prevent discrimination in AI-driven vehicles?",
+      mQ: "എഐ വാഹനങ്ങളിൽ വിവേചനം ഉണ്ടാകാതിരിക്കാൻ സഹായിക്കുന്ന ധാർമ്മിക രീതി ഏതാണ്?",
+      opts: ["Random decision-making", "Ignoring social factors", "Using ethically audited and diverse training data", "Increasing automation levels"],
+      mOpts: ["റാൻഡം തീരുമാനങ്ങൾ എടുക്കൽ", "സാമൂഹിക ഘടകങ്ങൾ അവഗണിക്കൽ", "നാനാവിധമായതും ഓഡിറ്റ് ചെയ്തതുമായ ഡാറ്റ ഉപയോഗിക്കൽ", "ഓട്ടോമേഷൻ വർദ്ധിപ്പിക്കൽ"],
+      ans: 2,
+      hint: "Representative training data covering pedestrians of all backgrounds.",
+      mHint: "എല്ലാ വിഭാഗങ്ങളെയും ഉൾക്കൊള്ളുന്ന വൈവിധ്യമാർന്ന ഡാറ്റ നൽകുക."
+    },
+    {
+      q: "Which ethical principle emphasizes that AI should support, not replace, human moral judgment?",
+      mQ: "എഐ മനുഷ്യന്റെ ധാർമ്മിക വിവേചനത്തെ മാറ്റിസ്ഥാപിക്കാതെ സഹായിക്കുകയാണ് വേണ്ടത് എന്ന് വ്യക്തമാക്കുന്ന തത്ത്വം ഏത്?",
+      opts: ["Full autonomy", "Machine supremacy", "Human-centered design", "Algorithmic dominance"],
+      mOpts: ["പൂർണ്ണ സ്വയംഭരണം", "മെഷീൻ ആധിപത്യം", "ഹ്യൂമൻ-സെന്റേർഡ് ഡിസൈൻ (Human-centered design)", "അൽഗോരിതമിക് ആധിപത്യം"],
+      ans: 2,
+      hint: "Keeping human agency and values at the center.",
+      mHint: "മനുഷ്യന്റെ ആവശ്യങ്ങൾക്കും വിവേകത്തിനും മുൻഗണന നൽകുന്ന രൂപകൽപ്പന."
+    },
+    {
+      q: "What is morality primarily concerned with?",
+      mQ: "ധാർമ്മികത (Morality) പ്രധാനമായും എന്തുമായി ബന്ധപ്പെട്ടിരിക്കുന്നു?",
+      opts: ["Legal rules", "Social customs only", "Distinguishing right from wrong", "Scientific facts"],
+      mOpts: ["നിയമങ്ങൾ", "സാമൂഹിക ആചാരങ്ങൾ മാത്രം", "ശരിയും തെറ്റും തിരിച്ചറിയൽ (Distinguishing right from wrong)", "ശാസ്ത്രീയ വസ്തുതകൾ"],
+      ans: 2,
+      hint: "Ethical distinctions of good and evil.",
+      mHint: "ശരി ഏതാണ് തെറ്റ് ഏതാണ് എന്ന് വേർതിരിക്കൽ."
+    },
+    {
+      q: "Moral values mainly guide a person's:",
+      mQ: "ധാർമ്മിക മൂല്യങ്ങൾ ഒരു വ്യക്തിയുടെ എന്തിനെയാണ് പ്രധാനമായും നയിക്കുന്നത്?",
+      opts: ["Physical strength", "Ethical behavior", "Economic status", "Intelligence level"],
+      mOpts: ["ശാരീരിക ശക്തി", "ധാർമ്മിക പെരുമാറ്റം (Ethical behavior)", "സാമ്പത്തിക സ്ഥിതി", "ബുദ്ധിയുടെ നിലവാരം"],
+      ans: 1,
+      hint: "Right actions and compassionate conduct.",
+      mHint: "ശരിയായ ജീവിതരീതിയും പെരുമാറ്റങ്ങളും."
+    },
+    {
+      q: "What is meant by moral harm?",
+      mQ: "ധാർമ്മികമായ ദോഷം (Moral harm) എന്നാൽ എന്താണ്?",
+      opts: ["Physical injury only", "Economic loss", "Violation of moral rights, dignity, or well-being", "Technical malfunction"],
+      mOpts: ["ശാരീരിക പരിക്ക് മാത്രം", "സാമ്പത്തിക നഷ്ടം", "ധാർമ്മിക അവകാശങ്ങൾ, അന്തസ്സ്, ക്ഷേമം എന്നിവയുടെ ലംഘനം", "സാങ്കേതിക തകരാർ"],
+      ans: 2,
+      hint: "Infringing upon fundamental human rights and dignity.",
+      mHint: "മനുഷ്യന്റെ അവകാശങ്ങളും അന്തസ്സും ഹനിക്കപ്പെടൽ."
+    },
+    {
+      q: "Which of the following best represents moral harm in AI systems?",
+      mQ: "എഐ സംവിധാനങ്ങളിൽ ധാർമ്മികമായ ദോഷത്തെ ഏറ്റവും നന്നായി പ്രതിനിധീകരിക്കുന്നത് ഏതാണ്?",
+      opts: ["Slow processing speed", "Biased decision-making", "High energy consumption", "Hardware damage"],
+      mOpts: ["പ്രോസസ്സിംഗ് വേഗത കുറയൽ", "പക്ഷപാതപരമായ തീരുമാനങ്ങൾ എടുക്കൽ (Biased decision-making)", "കൂടുതൽ വൈദ്യുതി ഉപയോഗം", "ഹാർഡ്‌വെയർ തകരാർ"],
+      ans: 1,
+      hint: "Discriminatory impact upon vulnerable individuals.",
+      mHint: "വിവേചനപരവും പക്ഷപാതപരവുമായ തെറ്റായ തീരുമാനങ്ങൾ."
+    },
+    {
+      q: "A moral agent is best defined as an entity that can:",
+      mQ: "ഒരു ധാർമ്മിക ഏജന്റ് (Moral Agent) എന്നാൽ എന്താണ്?",
+      opts: ["Perform complex calculations", "Follow programmed rules", "Distinguish right from wrong and be held responsible", "Store information"],
+      mOpts: ["സങ്കീർണ്ണമായ കണക്കുകൂട്ടലുകൾ നടത്താൻ കഴിയുന്ന ഒന്ന്", "നിയമങ്ങൾ അനുസരിക്കുന്ന ഒന്ന്", "ശരിയും തെറ്റും തിരിച്ചറിയാനും ഉത്തരവാദിത്തം വഹിക്കാനും കഴിയുന്ന സത്ത", "വിവരങ്ങൾ സൂക്ഷിക്കുന്ന ഒന്ന്"],
+      ans: 2,
+      hint: "Capable of moral reflection, choice, and accountability.",
+      mHint: "ശരിയും തെറ്റും തിരിച്ചറിഞ്ഞ് സ്വയം ഉത്തരവാദിത്തം ഏറ്റെടുക്കാൻ കഴിയുന്നവർ."
+    },
+    {
+      q: "Moral agents must possess:",
+      mQ: "ധാർമ്മിക ഏജന്റുകൾക്ക് തീർച്ചയായും ഉണ്ടായിരിക്കേണ്ട ഘടകങ്ങൾ:",
+      opts: ["Automation and efficiency", "Intentionality and autonomy", "Network connectivity", "Hardware reliability"],
+      mOpts: ["ഓട്ടോമേഷനും കാര്യക്ഷമതയും", "ഉദ്ദേശ്യബോധവും സ്വയംഭരണാധികാരവും (Intentionality & Autonomy)", "നെറ്റ്‌വർക്ക് കണക്റ്റിവിറ്റി", "ഹാർഡ്‌വെയർ വിശ്വാസ്യത"],
+      ans: 1,
+      hint: "Having purpose, consciousness, and freedom of choice.",
+      mHint: "സ്വന്തമായ ഉദ്ദേശ്യവും തെരഞ്ഞെടുക്കാനുള്ള സ്വാതന്ത്ര്യവും."
+    },
+    {
+      q: "Which ethical capacity allows a moral agent to be praised or blamed?",
+      mQ: "ഒരു ധാർമ്മിക ഏജന്റിന് പ്രശംസയോ കുറ്റപ്പെടുത്തലോ നൽകാൻ അർഹത നൽകുന്ന ശേഷി ഏതാണ്?",
+      opts: ["Storage capacity", "Free will", "Automation", "Pattern recognition"],
+      mOpts: ["ഡാറ്റ സംഭരണ ശേഷി", "സ്വതന്ത്ര ഇച്ഛാശക്തി (Free will)", "ഓട്ടോമേഷൻ", "പാറ്റേൺ തിരിച്ചറിയൽ"],
+      ans: 1,
+      hint: "Voluntary choice without total external coercion.",
+      mHint: "തീരുമാനങ്ങൾ എടുക്കാനുള്ള സ്വതന്ത്ര ഇച്ഛാശക്തി."
+    },
+    {
+      q: "When AI causes harm, who should be held morally accountable?",
+      mQ: "ഒരു എഐ സംവിധാനം നാശനഷ്ടം വരുത്തുമ്പോൾ ധാർമ്മികമായി ഉത്തരവാദിത്തം വഹിക്കേണ്ടത് ആരാണ്?",
+      opts: ["The AI system", "The algorithm", "Human stakeholders involved", "Random chance"],
+      mOpts: ["എഐ സിസ്റ്റം", "അൽഗോരിതം", "അതിന് പിന്നിൽ പ്രവർത്തിച്ച മനുഷ്യർ (Human stakeholders)", "യാദൃശ്ചികം"],
+      ans: 2,
+      hint: "Developers, operators, and overseeing institutions.",
+      mHint: "സിസ്റ്റം നിർമ്മിക്കുകയും നിയന്ത്രിക്കുകയും ചെയ്ത മനുഷ്യർ."
+    },
+    {
+      q: "If an AI system were conscious and morally autonomous, it might:",
+      mQ: "ഒരു എഐ സംവിധാനത്തിന് സ്വന്തമായി ബോധവും ധാർമ്മിക സ്വയംഭരണവും ഉണ്ടെങ്കിൽ:",
+      opts: ["Still be a tool", "Be considered a moral agent", "Lose efficiency", "Stop learning"],
+      mOpts: ["വെറുമൊരു ഉപകരണം മാത്രമായി തുടരും", "ഒരു ധാർമ്മിക ഏജന്റായി പരിഗണിക്കപ്പെട്ടേക്കാം", "കാര്യക്ഷമത നഷ്ടപ്പെടും", "പഠനം നിർത്തും"],
+      ans: 1,
+      hint: "Possessing duties and rights of its own.",
+      mHint: "അതിന് സ്വന്തമായി ധാർമ്മിക ഉത്തരവാദിത്തമുള്ള സത്തയായി കാണേണ്ടി വരും."
+    },
+    {
+      q: "Consciousness is best described as the:",
+      mQ: "ബോധം (Consciousness) എന്നാൽ ഏറ്റവും ഉചിതമായി വിശേഷിപ്പിക്കാവുന്നത്:",
+      opts: ["Ability to compute quickly", "Awareness of oneself and one's surroundings", "Having a physical body", "Storing information"],
+      mOpts: ["വേഗത്തിൽ കണക്കുകൂട്ടാനുള്ള കഴിവ്", "തന്നെയെക്കുറിച്ചും ചുറ്റുപാടുകളെക്കുറിച്ചുമുള്ള ആത്മബോധം (Awareness)", "ശരീരമുണ്ടായിരിക്കൽ", "വിവരങ്ങൾ ശേഖരിക്കൽ"],
+      ans: 1,
+      hint: "Subjective awareness of existence and sensations.",
+      mHint: "സ്വന്തം അവസ്ഥകളെയും ചുറ്റുപാടുകളെയും കുറിച്ചുള്ള ബോധം."
+    },
+    {
+      q: "Qualia refers to:",
+      mQ: "ക്വാലിയ (Qualia) എന്നത് എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
+      opts: ["Logical reasoning", "External behavior", "First-person subjective experience", "Memory storage"],
+      mOpts: ["യുക്തിചിന്ത", "ബാഹ്യ പെരുമാറ്റം", "വ്യക്തിപരമായ അനുഭവങ്ങൾ (First-person subjective experience)", "ഓർമ്മശക്തി"],
+      ans: 2,
+      hint: "The raw subjective 'what it is like' feel of experience (e.g., tasting sweetness).",
+      mHint: "ഓരോ വ്യക്തിയും സ്വന്തം അനുഭവിക്കുന്ന മാനസിക സംവേദനങ്ങൾ."
+    },
+    {
+      q: "The right of autonomy mainly protects a person's:",
+      mQ: "വ്യക്തിസ്വാതന്ത്ര്യത്തിന്റെ അവകാശം (Right of autonomy) പ്രധാനമായും സംരക്ഷിക്കുന്നത് എന്തിനെയാണ്?",
+      opts: ["Physical strength", "Freedom to make informed decisions", "Economic power", "Social influence"],
+      mOpts: ["ശാരീരിക ശക്തി", "സ്വയം അറിവോടെയുള്ള തീരുമാനങ്ങളെടുക്കാനുള്ള സ്വാതന്ത്ര്യം", "സാമ്പത്തിക അധികാരം", "സാമൂഹിക സ്വാധീനം"],
+      ans: 1,
+      hint: "Self-determination without undue manipulation.",
+      mHint: "സ്വന്തമായി കാര്യങ്ങൾ മനസ്സിലാക്കി തീരുമാനമെടുക്കാനുള്ള വ്യക്തിസ്വാതന്ത്ര്യം."
+    }
+  ];
+
+  let userAnswers = new Array(questionBank.length).fill(null);
+
+  function startExam() {
+    const nameInput = document.getElementById("student-name");
+    const val = nameInput.value.trim();
+    if (!val) {
+      alert("Please enter your full name to start the examination.");
+      nameInput.focus();
+      return;
+    }
+    studentName = val;
+    examStartTime = new Date();
+
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("exam-workspace").style.display = "block";
+
+    renderQuestions();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderQuestions() {
+    const list = document.getElementById("questions-list");
+    list.innerHTML = "";
+
+    questionBank.forEach((qData, qIdx) => {
+      const qCard = document.createElement("div");
+      qCard.className = "card";
+      qCard.id = `q-card-${qIdx}`;
+
+      let optionsHtml = "";
+      qData.opts.forEach((opt, optIdx) => {
+        optionsHtml += `
+          <label class="option-item" id="opt-label-${qIdx}-${optIdx}" onclick="selectAnswer(${qIdx}, ${optIdx})">
+            <input type="radio" name="question_${qIdx}" value="${optIdx}">
+            <span class="opt-content">
+              <strong>${String.fromCharCode(65 + optIdx)})</strong> 
+              <span class="opt-en">${escapeHtml(opt)}</span>
+              <span class="mal-text opt-mal" id="opt-mal-${qIdx}-${optIdx}">[${escapeHtml(qData.mOpts[optIdx])}]</span>
+            </span>
+          </label>
+        `;
+      });
+
+      qCard.innerHTML = `
+        <div class="q-meta">
+          <span>Question ${qIdx + 1} of ${questionBank.length}</span>
+          <span class="status-badge" id="badge-${qIdx}"></span>
+        </div>
+        <div class="q-text">
+          <span class="q-en">${escapeHtml(qData.q)}</span>
+          <span class="mal-text q-mal" id="q-mal-${qIdx}">[${escapeHtml(qData.mQ)}]</span>
+        </div>
+        <div class="options-grid">
+          ${optionsHtml}
+        </div>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" id="btn-hint-${qIdx}" onclick="toggleHint(${qIdx})">Hint</button>
+          <button type="button" class="btn btn-tool" id="btn-mal-${qIdx}" onclick="toggleMalayalam(${qIdx})">Malayalam</button>
+        </div>
+        <div class="hint-container" id="hint-box-${qIdx}">
+          <strong>Clue:</strong> <span class="hint-en">${escapeHtml(qData.hint)}</span>
+          <span class="mal-text hint-mal" id="hint-mal-${qIdx}">[${escapeHtml(qData.mHint)}]</span>
+        </div>
+      `;
+
+      list.appendChild(qCard);
+    });
+  }
+
+  function selectAnswer(qIdx, optIdx) {
+    if (userAnswers[qIdx] !== null || isSubmitted) return;
+
+    userAnswers[qIdx] = optIdx;
+    const qData = questionBank[qIdx];
+    const isCorrect = (optIdx === qData.ans);
+
+    const qCard = document.getElementById(`q-card-${qIdx}`);
+    const labels = qCard.querySelectorAll(".option-item");
+    const radios = qCard.querySelectorAll("input[type='radio']");
+    
+    radios.forEach(r => r.disabled = true);
+    labels.forEach(l => l.classList.add("locked"));
+
+    const selectedRadio = labels[optIdx].querySelector("input[type='radio']");
+    if (selectedRadio) selectedRadio.checked = true;
+
+    const badge = document.getElementById(`badge-${qIdx}`);
+    if (isCorrect) {
+      labels[optIdx].classList.add("correct");
+      badge.textContent = "✓ Correct Answer";
+      badge.className = "status-badge correct";
+    } else {
+      labels[optIdx].classList.add("incorrect");
+      labels[qData.ans].classList.add("correct");
+      badge.textContent = "✕ Incorrect Answer";
+      badge.className = "status-badge incorrect";
+    }
+  }
+
+  function toggleHint(qIdx) {
+    const hintBox = document.getElementById(`hint-box-${qIdx}`);
+    const btn = document.getElementById(`btn-hint-${qIdx}`);
+    const isVisible = hintBox.style.display === "block";
+    hintBox.style.display = isVisible ? "none" : "block";
+    btn.classList.toggle("active", !isVisible);
+  }
+
+  function toggleMalayalam(qIdx) {
+    const btn = document.getElementById(`btn-mal-${qIdx}`);
+    const qCard = document.getElementById(`q-card-${qIdx}`);
+    const malElements = qCard.querySelectorAll(".mal-text");
+
+    const willShow = !btn.classList.contains("active");
+    btn.classList.toggle("active", willShow);
+
+    malElements.forEach(el => {
+      el.style.display = willShow ? "inline" : "none";
+    });
+  }
+
+  function handlePreSubmit() {
+    if (isSubmitted) return;
+
+    const unansweredCount = userAnswers.filter(a => a === null).length;
+    if (unansweredCount > 0) {
+      document.getElementById("modal-warning-text").textContent = 
+        `You have ${unansweredCount} unanswered question${unansweredCount > 1 ? 's' : ''}. Do you want to review them or submit now?`;
+      document.getElementById("confirm-modal").classList.add("active");
+    } else {
+      executeFinalSubmit();
+    }
+  }
+
+  function closeConfirmModal() {
+    document.getElementById("confirm-modal").classList.remove("active");
+  }
+
+  function executeFinalSubmit() {
+    closeConfirmModal();
+    if (isSubmitted) return;
+    isSubmitted = true;
+
+    const submitEndTime = new Date();
+    const durationSeconds = Math.max(1, Math.round((submitEndTime - examStartTime) / 1000));
+    const minutes = Math.floor(durationSeconds / 60);
+    const seconds = durationSeconds % 60;
+    const timeTakenStr = `${minutes}m ${seconds}s`;
+
+    let score = 0;
+    let attended = 0;
+    let unattended = 0;
+
+    userAnswers.forEach((ans, idx) => {
+      const qData = questionBank[idx];
+      const qCard = document.getElementById(`q-card-${idx}`);
+      const labels = qCard.querySelectorAll(".option-item");
+      const radios = qCard.querySelectorAll("input[type='radio']");
+
+      radios.forEach(r => r.disabled = true);
+      labels.forEach(l => l.classList.add("locked"));
+
+      if (ans === null) {
+        unattended++;
+        labels[qData.ans].classList.add("correct");
+        const badge = document.getElementById(`badge-${idx}`);
+        badge.textContent = "○ Unattended";
+        badge.className = "status-badge incorrect";
+      } else {
+        attended++;
+        if (ans === qData.ans) {
+          score++;
+        }
+      }
+    });
+
+    const total = questionBank.length;
+    const percentage = Number(((score / total) * 100).toFixed(2));
+    let grade = "F";
+    if (percentage >= 90) grade = "A+";
+    else if (percentage >= 80) grade = "A";
+    else if (percentage >= 70) grade = "B";
+    else if (percentage >= 60) grade = "C";
+    else if (percentage >= 50) grade = "D";
+
+    let motivationalNote = "";
+    if (percentage >= 85) {
+      motivationalNote = "Outstanding achievement! You possess a profound understanding of Epistemology, Philosophy of Mind, and AI Ethics.";
+    } else if (percentage >= 70) {
+      motivationalNote = "Well done! You have demonstrated a strong conceptual grasp of foundational AI philosophy and ethics.";
+    } else if (percentage >= 50) {
+      motivationalNote = "Good effort. Reviewing key concepts in Functionalism, Dualism, and Pramana theory will help strengthen your knowledge.";
+    } else {
+      motivationalNote = "Keep learning. A structured review of foundational concepts and consistent revision will help improve your understanding.";
+    }
+
+    const payload = {
+      timestamp: submitEndTime.toISOString(),
+      name: studentName,
+      subject: SUBJECT_NAME,
+      date: submitEndTime.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
+      timeTaken: timeTakenStr,
+      total: total,
+      attended: attended,
+      unattended: unattended,
+      score: score,
+      percentage: percentage,
+      grade: grade
+    };
+
+    const scorecardHtml = createScorecardHTML(payload, motivationalNote);
+    document.getElementById("top-scorecard-container").innerHTML = scorecardHtml;
+    document.getElementById("bottom-scorecard-container").innerHTML = scorecardHtml;
+
+    document.getElementById("submit-section").style.display = "none";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    sendPayloadSilently(payload);
+  }
+
+  function createScorecardHTML(data, note) {
+    const isPassing = data.percentage >= 50;
+    return `
+      <div class="scorecard">
+        <h2>Examination Result & Performance Scorecard</h2>
+        <div class="scorecard-grid">
+          <div class="scorecard-metric">
+            <div class="metric-label">Student Name</div>
+            <div class="metric-val">${escapeHtml(data.name)}</div>
+          </div>
+          <div class="scorecard-metric">
+            <div class="metric-label">Subject</div>
+            <div class="metric-val" style="font-size: 16px;">${escapeHtml(data.subject)}</div>
+          </div>
+          <div class="scorecard-metric">
+            <div class="metric-label">Score / Total</div>
+            <div class="metric-val ${isPassing ? 'high' : 'low'}">${data.score} / ${data.total}</div>
+          </div>
+          <div class="scorecard-metric">
+            <div class="metric-label">Percentage</div>
+            <div class="metric-val ${isPassing ? 'high' : 'low'}">${data.percentage}%</div>
+          </div>
+          <div class="scorecard-metric">
+            <div class="metric-label">Grade</div>
+            <div class="metric-val ${isPassing ? 'high' : 'low'}">${data.grade}</div>
+          </div>
+          <div class="scorecard-metric">
+            <div class="metric-label">Attended / Skipped</div>
+            <div class="metric-val" style="font-size: 16px;">${data.attended} / ${data.unattended}</div>
+          </div>
+        </div>
+        <div class="scorecard-note">
+          <strong>Performance Note:</strong> ${escapeHtml(note)}
+        </div>
+      </div>
+    `;
+  }
+
+  function sendPayloadSilently(payload) {
+    if (!SCRIPT_URL) return;
+    try {
+      const dataToSend = {
+        timestamp: payload.timestamp,
+        name: payload.name,
+        subject: payload.subject,
+        date: payload.date,
+        timeTaken: payload.timeTaken,
+        total: payload.total,
+        attended: payload.attended,
+        unattended: payload.unattended,
+        score: payload.score,
+        percentage: payload.percentage,
+        grade: payload.grade
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(dataToSend)
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
+  function escapeHtml(text) {
+    if (typeof text !== "string") return text;
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+</script>
+</body>
+</html>
